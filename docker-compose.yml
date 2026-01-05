@@ -1,0 +1,40 @@
+services:
+  app:
+    build: ./tasks/docker
+    container_name: phungeon
+    environment:
+      PHP_IDE_CONFIG: "serverName=phungeon"
+    volumes:
+      - ".:/app"
+    command: "/usr/sbin/php-fpm8.2 -R"
+    networks:
+        - default
+
+
+  mysql:
+      platform: linux/arm64/v8
+      image: 'mysql:8.0.35'
+      ports:
+        - 127.0.0.1:3306:3306
+      environment:
+        MYSQL_ROOT_PASSWORD: 'root'
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        TZ: Europe/Amsterdam
+      volumes:
+        - "db:/var/lib/mysql:rw"
+        - "./tasks/docker/mysql/my.cnf:/etc/my.cnf:ro,cached"
+      networks:
+        - default
+      healthcheck:
+        test: [ "CMD", "/usr/bin/mysql", "--user=root", "--password=root", "--execute", "SHOW DATABASES;" ]
+
+
+networks:
+  default: ~
+
+volumes:
+  certs:
+    driver: local
+  db:
+    driver: local
+
