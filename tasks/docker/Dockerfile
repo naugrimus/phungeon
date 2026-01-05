@@ -23,11 +23,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
         build-essential \
         libncurses-dev \
         software-properties-common \
-        && curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - \
-        && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury-php.list \
      && rm -rf /var/lib/apt/lists/*_
 
-ENV PHP_VERSION 8.2
+ENV PHP_VERSION 8.4
 RUN curl -s -L https://packages.sury.org/php/apt.gpg | apt-key add - \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury_php.list \
     && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
