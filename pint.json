@@ -1,0 +1,27 @@
+{
+  "preset": "laravel",
+  "rules": {
+    "concat_space": {
+      "spacing": "one"
+    },
+    "ordered_imports": {
+      "sort_algorithm": "length"
+    },
+    "trailing_comma_in_multiline": {
+      "elements": [
+        "arrays",
+        "match"
+      ]
+    },
+    "class_reference_name_casing": true,
+    "switch_continue_to_break": true
+  },
+  "notPath": [
+    "tests/Foundation/fixtures/bad-syntax-strategy.php"
+  ],
+  "exclude": [
+    "app/Storage/Fonts",
+    "database",
+    "public"
+  ]
+}
