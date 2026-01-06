@@ -8,7 +8,7 @@ use App\Exceptions\FileNotFoudException;
 
 class Intro
 {
-    public function render(): bool
+    public function render(): void
     {
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         $this->createBackgroundColor();
@@ -34,11 +34,9 @@ class Intro
         fwrite(STDOUT, $tekst . PHP_EOL);
 
         while (true) {
-            $key = fread(STDIN, 3);
+            $key = fgetc(STDIN);
             if ($key !== '') {
-                fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
 
-                return true;
             }
         }
 
