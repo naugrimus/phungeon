@@ -2,18 +2,19 @@
 
 namespace App;
 
-use Engine\Core\State;
-use Engine\Core\Engine;
 use App\enums\AnsiiConstants;
+use App\Renderers\Intro;
 
 class Game
 {
-    public function start()
-    {
-        fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
-        $state = new State;
-        $engine = new Engine($state);
-        $engine->run();
+    public function start() {
+
+
+        fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
+        $intro = new Intro;
+        if($intro->render()) {
+
+        };
     }
 }
