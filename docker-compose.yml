@@ -6,7 +6,7 @@ services:
       PHP_IDE_CONFIG: "serverName=phungeon"
     volumes:
       - ".:/app"
-    command: "/usr/sbin/php-fpm8.2 -R"
+    command: "/usr/sbin/php-fpm8.4 -R"
     networks:
         - default
 
