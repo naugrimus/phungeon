@@ -2,10 +2,11 @@
 
 namespace Engine\Core;
 
+use Engine\Interfaces\BaseStateInterface;
 use Engine\Models\Room;
 use Engine\Models\Player;
 
-class State
+class State implements BaseStateInterface
 {
     protected bool $showIntro = true;
 

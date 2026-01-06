@@ -8,7 +8,7 @@ use App\Exceptions\FileNotFoudException;
 
 class Intro
 {
-    public function render(): bool
+    public function render(): void
     {
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         $this->createBackgroundColor();
@@ -33,14 +33,7 @@ class Intro
         fwrite(STDOUT, str_repeat("\033[45m \033[0m", Terminal::calculateLeftPadding(strlen($tekst))));
         fwrite(STDOUT, $tekst . PHP_EOL);
 
-        while (true) {
-            $key = fread(STDIN, 3);
-            if ($key !== '') {
-                fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
 
-                return true;
-            }
-        }
 
     }
 
