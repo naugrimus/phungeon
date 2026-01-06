@@ -33,9 +33,16 @@ class Intro
         fwrite(STDOUT, str_repeat("\033[45m \033[0m", Terminal::calculateLeftPadding(strlen($tekst))));
         fwrite(STDOUT, $tekst . PHP_EOL);
 
+        echo "\033[?25l";
+
+// Disable line buffering and echo
+        system('stty -icanon -echo');
+        stream_set_blocking(STDIN, false);
+
         while (true) {
-            $key = fread(STDIN, 3);
-            if ($key !== '') {
+            $key = fgets(STDIN);
+            if ($key != '') {
+                
                 fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
 
                 return true;
