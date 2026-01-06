@@ -2,16 +2,18 @@
 
 namespace Engine\Core;
 
-use App\enums\AnsiiConstants;
 use App\Renderers\Intro;
-use Engine\Handlers\InputHandler;
+use App\enums\AnsiiConstants;
+use Engine\Interfaces\BaseStateInterface;
 
 class Engine
 {
     protected State $state;
 
-    public function __construct(State $state)
+    public function __construct(BaseStateInterface $state)
     {
+        echo AnsiiConstants::HIDECURSOR;
+
         $this->state = $state;
 
     }
@@ -19,32 +21,27 @@ class Engine
     public function run()
     {
         while (true) {
-            fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
-
             $this->handleIntro();
-
+            $this->handleMap();
         }
 
     }
 
     protected function handleIntro(): void
     {
+
         if ($this->state->isShowIntro()) {
-            echo AnsiiConstants::HIDECURSOR;
-            system('stty -echo -icannon');
-            stream_set_blocking(STDIN, false);
-
-
-            echo "033[?25l";
+            fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
             $intro = new Intro;
             $intro->render();
-            $key = InputHandler::read();
-            if($key) {
+            $key = fgets(STDIN);
+            if ($key !== '') {
                 fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
-
                 $this->state->setShowIntro(false);
             }
         }
     }
+
+    protected function handleMap(): void {}
 }
