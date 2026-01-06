@@ -2,7 +2,4 @@
 
 namespace App\enums;
 
-class AnsiiColors
-{
-
-}
+class AnsiiColors {}
