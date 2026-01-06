@@ -6,12 +6,14 @@ class ScreenWriter
 {
     protected $handler;
 
-    public function open() {
+    public function open()
+    {
         $this->handler = fopen('php://stdout', 'w');
 
     }
 
-    public function write(string $message) {
+    public function write(string $message)
+    {
         fwrite($this->handler, $message);
     }
 }

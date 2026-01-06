@@ -29,14 +29,15 @@ class Intro
         }
 
         $tekst = 'Press any key';
-        fwrite(STDOUT, PHP_EOL,);
+        fwrite(STDOUT, PHP_EOL);
         fwrite(STDOUT, str_repeat("\033[45m \033[0m", Terminal::calculateLeftPadding(strlen($tekst))));
         fwrite(STDOUT, $tekst . PHP_EOL);
 
-        while(true) {
+        while (true) {
             $key = fread(STDIN, 3);
-            if($key !== '') {
+            if ($key !== '') {
                 fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
+
                 return true;
             }
         }
@@ -51,9 +52,6 @@ class Intro
         throw new FileNotFoudException(sprintf('Could not read %s.' . $filename));
     }
 
-    /**
-     * @return void
-     */
     public function createBackgroundColor(): void
     {
         $cols = Terminal::getTerminalWidth();

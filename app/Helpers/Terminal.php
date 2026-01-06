@@ -16,12 +16,13 @@ class Terminal
 
     }
 
-    public static function calculateTopPadding(int $lentgh): int {
-       return  intval((self::getTerminalHeight() - $lentgh) / 2);
+    public static function calculateTopPadding(int $lentgh): int
+    {
+        return intval((self::getTerminalHeight() - $lentgh) / 2);
     }
 
-    public static function calculateLeftPadding(int $lentgh): int {
-        return  intval((self::getTerminalWidth() - $lentgh) / 2);
+    public static function calculateLeftPadding(int $lentgh): int
+    {
+        return intval((self::getTerminalWidth() - $lentgh) / 2);
     }
-
 }
