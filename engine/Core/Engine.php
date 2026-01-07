@@ -2,46 +2,16 @@
 
 namespace Engine\Core;
 
-use App\Renderers\Intro;
-use App\enums\AnsiiConstants;
-use Engine\Interfaces\BaseStateInterface;
+use Engine\Handlers\InputHandler;
+use Engine\Interfaces\StateFactoryInterface;
 
 class Engine
 {
-    protected State $state;
+    public function __construct(protected readonly StateFactoryInterface $stateFactory) {}
 
-    public function __construct(BaseStateInterface $state)
+    public function run(GameData $gameData, InputHandler $inputHandler)
     {
-        echo AnsiiConstants::HIDECURSOR;
-
-        $this->state = $state;
-
+        $state = $this->stateFactory->create($gameData->getState()->getName());
+        $state->handle($gameData, $inputHandler);
     }
-
-    public function run()
-    {
-        while (true) {
-            $this->handleIntro();
-            $this->handleMap();
-        }
-
-    }
-
-    protected function handleIntro(): void
-    {
-
-        if ($this->state->isShowIntro()) {
-            fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
-
-            $intro = new Intro;
-            $intro->render();
-            $key = fgets(STDIN);
-            if ($key !== '') {
-                fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
-                $this->state->setShowIntro(false);
-            }
-        }
-    }
-
-    protected function handleMap(): void {}
 }
