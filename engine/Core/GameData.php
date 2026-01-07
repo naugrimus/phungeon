@@ -2,13 +2,25 @@
 
 namespace Engine\Core;
 
-use Engine\Interfaces\BaseStateInterface;
+use Engine\Interfaces\BaseGameStateInterface;
+use Engine\Interfaces\StateInterface;
 use Engine\Models\Room;
 use Engine\Models\Player;
 
-class State implements BaseStateInterface
+class GameData implements BaseGameStateInterface
 {
-    protected bool $showIntro = true;
+    protected StateInterface $state;
+
+    public function getState(): StateInterface
+    {
+        return $this->state;
+    }
+
+    public function setState(StateInterface $state): self
+    {
+        $this->state = $state;
+        return $this;
+    }
 
     protected Player $player;
 
@@ -38,15 +50,5 @@ class State implements BaseStateInterface
         return $this;
     }
 
-    public function isShowIntro(): bool
-    {
-        return $this->showIntro;
-    }
 
-    public function setShowIntro(bool $showIntro): self
-    {
-        $this->showIntro = $showIntro;
-
-        return $this;
-    }
 }

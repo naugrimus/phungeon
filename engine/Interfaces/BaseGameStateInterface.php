@@ -2,7 +2,7 @@
 
 namespace Engine\Interfaces;
 
-interface BaseStateInterface
+interface BaseGameStateInterface
 {
 
 }
