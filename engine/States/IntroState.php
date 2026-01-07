@@ -12,6 +12,6 @@ class IntroState extends AbstractState implements StateInterface
 
     public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
-        var_dump($gameData);
+        // var_dump($gameData);
     }
 }
