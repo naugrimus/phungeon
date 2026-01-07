@@ -10,5 +10,4 @@ interface StateInterface
     public function handle(GameData $gameState, InputHandler $inputHandler);
 
     public function getName(): string;
-
 }

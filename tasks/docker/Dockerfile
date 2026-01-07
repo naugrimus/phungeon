@@ -33,6 +33,7 @@ RUN curl -s -L https://packages.sury.org/php/apt.gpg | apt-key add - \
         php${PHP_VERSION}-cli \
         php${PHP_VERSION}-dev \
         php${PHP_VERSION}-fpm \
+        php${PHP_VERSION}-xml \
         php${PHP_VERSION}-odbc \
         php${PHP_VERSION}-mysql \
         php${PHP_VERSION}-xmlrpc \

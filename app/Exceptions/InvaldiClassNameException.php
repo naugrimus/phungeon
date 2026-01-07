@@ -2,7 +2,4 @@
 
 namespace App\Exceptions;
 
-class InvaldiClassNameException extends \Exception
-{
-
-}
+class InvaldiClassNameException extends \Exception {}

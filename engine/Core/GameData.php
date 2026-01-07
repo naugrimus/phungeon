@@ -2,10 +2,10 @@
 
 namespace Engine\Core;
 
-use Engine\Interfaces\BaseGameStateInterface;
-use Engine\Interfaces\StateInterface;
 use Engine\Models\Room;
 use Engine\Models\Player;
+use Engine\Interfaces\StateInterface;
+use Engine\Interfaces\BaseGameStateInterface;
 
 class GameData implements BaseGameStateInterface
 {
@@ -19,6 +19,7 @@ class GameData implements BaseGameStateInterface
     public function setState(StateInterface $state): self
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -49,6 +50,4 @@ class GameData implements BaseGameStateInterface
 
         return $this;
     }
-
-
 }

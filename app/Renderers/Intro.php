@@ -33,8 +33,6 @@ class Intro
         fwrite(STDOUT, str_repeat("\033[45m \033[0m", Terminal::calculateLeftPadding(strlen($tekst))));
         fwrite(STDOUT, $tekst . PHP_EOL);
 
-
-
     }
 
     protected function readFile(string $filename): string

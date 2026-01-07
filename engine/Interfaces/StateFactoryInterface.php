@@ -2,7 +2,4 @@
 
 namespace Engine\Interfaces;
 
-interface StateFactoryInterface
-{
-
-}
+interface StateFactoryInterface {}

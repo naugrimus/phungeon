@@ -5,8 +5,8 @@ namespace App;
 use Engine\Core\Engine;
 use Engine\Core\GameData;
 use App\enums\AnsiiConstants;
-use Engine\Handlers\InputHandler;
 use Engine\States\IntroState;
+use Engine\Handlers\InputHandler;
 use Engine\Factories\StateFactory;
 use App\Exceptions\FileNotFoudException;
 
