@@ -6,10 +6,10 @@ use Engine\Core\GameData;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
 
-class CreateRoomState  extends AbstractState implements StateInterface
+class DungeoneeringState  extends AbstractState implements StateInterface
 {
 
-    const NAME = 'CreateRoom';
+    const NAME = 'Dungeoneering';
 
     public function handle(GameData $gameState, InputHandler $inputHandler)
     {
