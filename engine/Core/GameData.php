@@ -27,6 +27,8 @@ class GameData implements BaseGameStateInterface
 
     protected array $rooms = [];
 
+    protected ?int $currentRoom = null;
+
     public function getRooms(): array
     {
         return $this->rooms;
@@ -50,4 +52,17 @@ class GameData implements BaseGameStateInterface
 
         return $this;
     }
+
+    public function getCurrentRoom(): ?int
+    {
+        return $this->currentRoom;
+    }
+
+    public function setCurrentRoom(int $roomId): self
+    {
+        $this->currentRoom = $roomId;
+        return $this;
+    }
+
+
 }

@@ -12,17 +12,22 @@ class renderFactory
     public function create($gameData): void
     {
 
-        $renderer = match ($gameData->getState()->getName()) {
-            'Intro' => new Intro(),
-            'Dungeoneering' => new Dungeoneering(),
-            'default' => throw new \Exception('Invalid gameState'),
-        };
-        if ($gameData->getState()->getName() !== $this->currentState) {
-            $renderer->render($gameData);
+            $renderer = match ($gameData->getState()->getName()) {
+                'Intro' => new Intro(),
+                'Dungeoneering' => new Dungeoneering(),
+                'default' => throw new \Exception('Invalid gameState'),
+            };
 
-        }
+            if ($gameData->getState()->getName() !== $this->currentState) {
+                $renderer->render($gameData);
 
-        $this->currentState = $gameData->getState()->getName();
+            }
+
+            $this->currentState = $gameData->getState()->getName();
+
+
+
+
 
     }
 }
