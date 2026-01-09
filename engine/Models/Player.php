@@ -8,4 +8,11 @@ class Player extends AbstractModel {
     {
         $this->position = new Position();
     }
+
+    public function setPlayerPosition($x, $y) {
+        $this->position->setX($x);
+        $this->position->setY($y);
+    }
+
+
 }
