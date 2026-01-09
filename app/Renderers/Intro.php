@@ -11,6 +11,7 @@ class Intro
 {
     public function render(GameData $gameData): void
     {
+
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         $this->createBackgroundColor();
 

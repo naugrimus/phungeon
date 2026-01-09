@@ -13,7 +13,7 @@ class Dungeoneering
     public function render(GameData $gameData): void
     {
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
-
+        fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
         if ($gameData->getCurrentRoom() === null) {
             $generator = new RoomGenerator;
             $room = new Room;

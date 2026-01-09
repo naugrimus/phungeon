@@ -18,16 +18,20 @@ class renderFactory
                 'default' => throw new \Exception('Invalid gameState'),
             };
 
-            if ($gameData->getState()->getName() !== $this->currentState) {
-                $renderer->render($gameData);
+                    if($gameData->getTurns() != $gameData->getCurrentTurn() || $gameData->getTurns() == 0) {
+                        $gameData->setCurrentTurn($gameData->getTurns());
+                        $this->currentState = $gameData->getState()->getName();
+                        $renderer->render($gameData);
 
-            }
-
-            $this->currentState = $gameData->getState()->getName();
-
-
+                    };
 
 
+                }
 
-    }
+
+
+
+
+
+
 }

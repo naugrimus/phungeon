@@ -24,7 +24,9 @@ class Game
     public function start()
     {
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
-
+// Disable input echo
+        echo "\033[?25h";
+        system('stty -echo -icanon');
         $gameData = new GameData;
         $gameData->setState(new IntroState);
 
