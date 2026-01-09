@@ -2,7 +2,7 @@
 
 namespace Engine\Factories;
 
-use App\Renderers\CreateRoom;
+use App\Renderers\Dungeoneering;
 use App\Renderers\Intro;
 
 class renderFactory
@@ -12,17 +12,26 @@ class renderFactory
     public function create($gameData): void
     {
 
-        $renderer = match ($gameData->getState()->getName()) {
-            'Intro' => new Intro(),
-            'CreateRoom' => new CreateRoom(),
-            'default' => throw new \Exception('Invalid gameState'),
-        };
-        if ($gameData->getState()->getName() !== $this->currentState) {
-            $renderer->render($gameData);
+            $renderer = match ($gameData->getState()->getName()) {
+                'Intro' => new Intro(),
+                'Dungeoneering' => new Dungeoneering(),
+                'default' => throw new \Exception('Invalid gameState'),
+            };
 
-        }
+                    if($gameData->getTurns() != $gameData->getCurrentTurn() || $gameData->getTurns() == 0) {
+                        $gameData->setCurrentTurn($gameData->getTurns());
+                        $this->currentState = $gameData->getState()->getName();
+                        $renderer->render($gameData);
 
-        $this->currentState = $gameData->getState()->getName();
+                    };
 
-    }
+
+                }
+
+
+
+
+
+
+
 }

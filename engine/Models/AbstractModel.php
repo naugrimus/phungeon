@@ -7,4 +7,8 @@ class AbstractModel
     protected int $health;
 
     protected Position $position;
+
+    public function getPosition() {
+        return $this->position;
+    }
 }

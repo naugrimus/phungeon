@@ -27,7 +27,7 @@ class Position
 
     public function setY(int $y): self
     {
-        $this->x = $x;
+        $this->y = $y;
 
         return $this;
     }

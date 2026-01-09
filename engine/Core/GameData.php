@@ -11,6 +11,10 @@ class GameData implements BaseGameStateInterface
 {
     protected StateInterface $state;
 
+    protected int $turns = 0;
+
+    protected int $currentTurn = 0;
+
     public function getState(): StateInterface
     {
         return $this->state;
@@ -26,6 +30,8 @@ class GameData implements BaseGameStateInterface
     protected Player $player;
 
     protected array $rooms = [];
+
+    protected ?int $currentRoom = null;
 
     public function getRooms(): array
     {
@@ -50,4 +56,35 @@ class GameData implements BaseGameStateInterface
 
         return $this;
     }
+
+    public function getCurrentRoom(): ?int
+    {
+        return $this->currentRoom;
+    }
+
+    public function setCurrentRoom(int $roomId): self
+    {
+        $this->currentRoom = $roomId;
+        return $this;
+    }
+
+    public function updateTurns(): void {
+        $this->turns++;
+    }
+
+    public function getTurns() {
+        return $this->turns;
+    }
+
+
+    public function setCurrentTurn(int $turn): self
+    {
+        $this->currentTurn = $turn;
+        return $this;
+    }
+
+    public function getCurrentTurn(): int {
+        return $this->currentTurn;
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App;
 
 use Engine\Core\Engine;
 use Engine\Core\GameData;
+use Engine\Models\Player;
 use App\enums\AnsiiConstants;
 use Engine\States\IntroState;
 use Engine\Handlers\InputHandler;
@@ -23,9 +24,13 @@ class Game
     public function start()
     {
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
-
+// Disable input echo
+        echo "\033[?25h";
+        system('stty -echo -icanon');
         $gameData = new GameData;
         $gameData->setState(new IntroState);
+
+        $gameData->setPlayer(new Player);
 
         $factory = new StateFactory;
 
@@ -41,7 +46,10 @@ class Game
         $engine = new Engine($factory);
         while (true) {
             $renderFactory->create($gameData);
+
             $engine->run($gameData, $inputHandler);
+
+
 
         }
     }

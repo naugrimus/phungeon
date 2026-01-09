@@ -5,11 +5,13 @@ namespace App\Renderers;
 use App\Helpers\Terminal;
 use App\enums\AnsiiConstants;
 use App\Exceptions\FileNotFoudException;
+use Engine\Core\GameData;
 
 class Intro
 {
-    public function render(): void
+    public function render(GameData $gameData): void
     {
+
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         $this->createBackgroundColor();
 

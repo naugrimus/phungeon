@@ -7,7 +7,7 @@ use Engine\Handlers\InputHandler;
 
 interface StateInterface
 {
-    public function handle(GameData $gameState, InputHandler $inputHandler);
+    public function handle(GameData $gameData, InputHandler $inputHandler);
 
     public function getName(): string;
 }
