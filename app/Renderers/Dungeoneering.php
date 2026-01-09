@@ -2,6 +2,7 @@
 
 namespace App\Renderers;
 
+use App\enums\Elements;
 use Engine\Models\Room;
 use Engine\Core\GameData;
 use Engine\Models\Player;
@@ -32,7 +33,7 @@ class Dungeoneering
             foreach ($row as $x => $value) {
                 if ($x == $gameData->getPlayer()->getPosition()->getX() &&
                  $y == $gameData->getPlayer()->getPosition()->getY()) {
-                    fwrite(STDOUT, '§');
+                    fwrite(STDOUT, Elements::PLAYER);
                 } else {
                     fwrite(STDIN, $value);
 

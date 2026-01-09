@@ -7,4 +7,6 @@ class Elements
     const WALL = '#';
 
     const PLAYER = '§';
+
+    const FLOOR = ' ';
 }

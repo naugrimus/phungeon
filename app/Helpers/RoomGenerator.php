@@ -35,7 +35,7 @@ class RoomGenerator
 
         $startX = 1;
         $startY = 1;
-        $this->room[$startY][$startX] = ' ';
+        $this->room[$startY][$startX] = Elements::FLOOR;
 
         $this->carve($startX, $startY, $this->carveDirections, $this->width, $this->height);
 
@@ -56,8 +56,8 @@ class RoomGenerator
             // 👇 This automatically protects the border
             if ($nx > 0 && $ny > 0 && $nx < $width - 1 && $ny < $height - 1) {
 
-                if ($this->room[$ny][$nx] === '#') {
-                    $this->room[$y + intdiv($dy, 2)][$x + intdiv($dx, 2)] = ' ';
+                if ($this->room[$ny][$nx] === Elements::WALL) {
+                    $this->room[$y + intdiv($dy, 2)][$x + intdiv($dx, 2)] = Elements::FLOOR;
                     $this->room[$ny][$nx] = ' ';
                     $this->carve($nx, $ny, $dirs, $width, $height);
                 }
@@ -70,10 +70,11 @@ class RoomGenerator
     protected function createExits()
     {
 
-        $this->room[0][intval($this->width / 2)] = ' ';
-        $this->room[intval($this->height / 2)][0] = ' ';
-        $this->room[$this->height - 1][intval($this->width / 2)] = ' ';
-        $this->room[intval($this->height / 2)][$this->width - 1] = ' ';
+        $this->room[0][intval($this->width / 2)] = Elements::FLOOR;
+        $this->room[intval($this->height / 2)][0] = Elements::FLOOR;
+        $this->room[$this->height - 1][intval($this->width / 2)] = Elements::FLOOR;
+        $this->room[intval($this->height / 2)][$this->width - 1] = Elements::FLOOR;
+        ;
 
     }
 }
