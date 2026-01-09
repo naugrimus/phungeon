@@ -2,6 +2,7 @@
 
 namespace Engine\Factories;
 
+use App\Renderers\CreateRoom;
 use App\Renderers\Intro;
 
 class renderFactory
@@ -12,7 +13,8 @@ class renderFactory
     {
 
         $renderer = match ($gameData->getState()->getName()) {
-            'Intro' => new Intro,
+            'Intro' => new Intro(),
+            'CreateRoom' => new CreateRoom(),
             'default' => throw new \Exception('Invalid gameState'),
         };
         if ($gameData->getState()->getName() !== $this->currentState) {

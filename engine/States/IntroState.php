@@ -12,6 +12,8 @@ class IntroState extends AbstractState implements StateInterface
 
     public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
-        // var_dump($gameData);
+        if ($inputHandler::read() != '') {
+            $gameData->setState(new CreateRoomState());
+        }
     }
 }
