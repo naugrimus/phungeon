@@ -2,6 +2,7 @@
 
 namespace Engine\States;
 
+use App\enums\Elements;
 use Engine\Core\GameData;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
@@ -31,7 +32,8 @@ class DungeoneeringState extends AbstractState implements StateInterface
         switch ($this->inputHandler::read()) {
             case 'w':
                 $y--;
-                if (! $this->detectBlocking($x, $y)) {
+
+                if (! $this->detectBlocking($x, $y )) {
                     $this->gameData->getPlayer()->getPosition()->setY($y);
                     $this->gameData->updateTurns();
                 }
@@ -39,14 +41,14 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 break;
             case 's':
                 $y++;
-                if (! $this->detectBlocking($x, $y+1)) {
+                if (! $this->detectBlocking($x, $y)) {
                     $this->gameData->getPlayer()->getPosition()->setY($y);
                     $this->gameData->updateTurns();
                 }
                 break;
             case 'a':
                 $x--;
-                if (! $this->detectBlocking($x, $y)) {
+                if (! $this->detectBlocking($x , $y)) {
                     $this->gameData->getPlayer()->getPosition()->setX($x);
                     $this->gameData->updateTurns();
                 }
@@ -59,6 +61,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 }
                 break;
         }
+
     }
 
     protected function detectBlocking($playerX, $playerY): bool
@@ -66,10 +69,10 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $rooms = $this->gameData->getRooms();
         $room = $rooms[$this->gameData->getCurrentRoom()];
         $map = $room->getMap();
-        foreach ($map as $col => $value) {
-            $array = str_split($value);
-            foreach ($array as $row => $char) {
-                if ($row == $playerX && $char == '#' && $col == $playerY) {
+
+        foreach ($map as $row => $value) {
+            foreach ($value as $col => $char) {
+                if ($row == $playerY && $char == Elements::WALL && $col == $playerX) {
                     return true;
                 }
             }
