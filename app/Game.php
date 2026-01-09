@@ -8,6 +8,7 @@ use App\enums\AnsiiConstants;
 use Engine\States\IntroState;
 use Engine\Handlers\InputHandler;
 use Engine\Factories\StateFactory;
+use Engine\Factories\renderFactory;
 use App\Exceptions\FileNotFoudException;
 
 class Game
@@ -35,8 +36,14 @@ class Game
 
             $factory->add(array_key_first($state), $class);
         }
+
+        $renderFactory = new renderFactory;
         $engine = new Engine($factory);
-        $engine->run($gameData, $inputHandler);
+        while (true) {
+            $renderFactory->create($gameData);
+            $engine->run($gameData, $inputHandler);
+
+        }
     }
 
     protected function fetchStates(): void
