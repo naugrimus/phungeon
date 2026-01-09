@@ -10,9 +10,13 @@ class RoomGenerator
 
     protected array $carveDirections;
 
+    protected int $width;
+    
+    protected int $height;
     public function __construct()
     {
-
+        $this->width = 45;
+        $this->height = 25;
         $this->carveDirections = [
             [0, -2],
             [0, 2],
@@ -25,23 +29,23 @@ class RoomGenerator
     public function generate()
     {
 
-        $tWidth = 45;
-        $tHeight = 25;
+     
 
-        $room = $this->room = array_fill(0, $tHeight,
-            array_fill(0, $tWidth, Elements::WALL));
+        $this->room = array_fill(0, $this->height,
+            array_fill(0, $this->width, Elements::WALL));
 
         $startX = 1;
         $startY = 1;
-        $room[$startY][$startX] = ' ';
+        $this->room[$startY][$startX] = ' ';
 
-        $room = $this->carve($startX, $startY, $room, $this->carveDirections, $tWidth, $tHeight);
+        $this->carve($startX, $startY, $this->carveDirections, $this->width, $this->height);
 
-        return $room;
+        $this->createExits();
+        return $this->room;
 
     }
 
-    protected function carve($x, $y, &$maze, $dirs, $width, $height)
+    protected function carve($x, $y, $dirs, $width, $height)
     {
         shuffle($dirs);
 
@@ -52,14 +56,26 @@ class RoomGenerator
             // 👇 This automatically protects the border
             if ($nx > 0 && $ny > 0 && $nx < $width - 1 && $ny < $height - 1) {
 
-                if ($maze[$ny][$nx] === '#') {
-                    $maze[$y + intdiv($dy, 2)][$x + intdiv($dx, 2)] = ' ';
-                    $maze[$ny][$nx] = ' ';
-                    $this->carve($nx, $ny, $maze, $dirs, $width, $height);
+                if ($this->room[$ny][$nx] === '#') {
+                    $this->room[$y + intdiv($dy, 2)][$x + intdiv($dx, 2)] = ' ';
+                    $this->room[$ny][$nx] = ' ';
+                    $this->carve($nx, $ny, $dirs, $width, $height);
                 }
             }
         }
 
-        return $maze;
+        return $this->room;
+    }
+
+    protected function createExits()
+    {
+
+        $this->room[0][intval($this->width/2)] = ' ';
+        $this->room[intval($this->height/2)][0] = ' ';
+        $this->room[$this->height -1][intval($this->width/2)] = ' ';
+        $this->room[intval($this->height/2)][$this->width -1] = ' ';
+
+
+
     }
 }
