@@ -4,8 +4,6 @@ namespace Engine\Core;
 
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateFactoryInterface;
-use Engine\States\DungeoneeringState;
-use Engine\States\IntroState;
 
 class Engine
 {
@@ -17,7 +15,6 @@ class Engine
         $state = $this->stateFactory->create($gameData->getState()->getName());
 
         $state->handle($gameData, $inputHandler);
-
 
     }
 }

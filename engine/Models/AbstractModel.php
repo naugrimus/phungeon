@@ -8,7 +8,8 @@ class AbstractModel
 
     protected Position $position;
 
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->position;
     }
 }

@@ -8,12 +8,13 @@ class Room
 
     protected array $map = [];
 
-
-    public function setMap(array $map):void {
+    public function setMap(array $map): void
+    {
         $this->map = $map;
     }
 
-    public function getMap(): array {
+    public function getMap(): array
+    {
         return $this->map;
     }
 }

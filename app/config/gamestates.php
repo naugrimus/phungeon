@@ -1,7 +1,7 @@
 <?php
 
-use Engine\States\DungeoneeringState;
 use Engine\States\IntroState;
+use Engine\States\DungeoneeringState;
 
 return [
     ['Intro' => IntroState::class],

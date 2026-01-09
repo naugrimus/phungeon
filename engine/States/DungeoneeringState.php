@@ -33,7 +33,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
             case 'w':
                 $y--;
 
-                if (! $this->detectBlocking($x, $y )) {
+                if (! $this->detectBlocking($x, $y)) {
                     $this->gameData->getPlayer()->getPosition()->setY($y);
                     $this->gameData->updateTurns();
                 }
@@ -48,7 +48,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 break;
             case 'a':
                 $x--;
-                if (! $this->detectBlocking($x , $y)) {
+                if (! $this->detectBlocking($x, $y)) {
                     $this->gameData->getPlayer()->getPosition()->setX($x);
                     $this->gameData->updateTurns();
                 }

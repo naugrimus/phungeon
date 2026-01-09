@@ -11,8 +11,9 @@ class RoomGenerator
     protected array $carveDirections;
 
     protected int $width;
-    
+
     protected int $height;
+
     public function __construct()
     {
         $this->width = 45;
@@ -29,8 +30,6 @@ class RoomGenerator
     public function generate()
     {
 
-     
-
         $this->room = array_fill(0, $this->height,
             array_fill(0, $this->width, Elements::WALL));
 
@@ -41,6 +40,7 @@ class RoomGenerator
         $this->carve($startX, $startY, $this->carveDirections, $this->width, $this->height);
 
         $this->createExits();
+
         return $this->room;
 
     }
@@ -70,12 +70,10 @@ class RoomGenerator
     protected function createExits()
     {
 
-        $this->room[0][intval($this->width/2)] = ' ';
-        $this->room[intval($this->height/2)][0] = ' ';
-        $this->room[$this->height -1][intval($this->width/2)] = ' ';
-        $this->room[intval($this->height/2)][$this->width -1] = ' ';
-
-
+        $this->room[0][intval($this->width / 2)] = ' ';
+        $this->room[intval($this->height / 2)][0] = ' ';
+        $this->room[$this->height - 1][intval($this->width / 2)] = ' ';
+        $this->room[intval($this->height / 2)][$this->width - 1] = ' ';
 
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Renderers;
 
 use App\Helpers\Terminal;
+use Engine\Core\GameData;
 use App\enums\AnsiiConstants;
 use App\Exceptions\FileNotFoudException;
-use Engine\Core\GameData;
 
 class Intro
 {

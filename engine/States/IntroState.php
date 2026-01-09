@@ -15,7 +15,7 @@ class IntroState extends AbstractState implements StateInterface
 
         if ($inputHandler::read() != ' ') {
             $gameData->updateTurns();
-            $gameData->setState(new DungeoneeringState());
+            $gameData->setState(new DungeoneeringState);
         }
 
     }

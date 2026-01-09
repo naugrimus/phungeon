@@ -65,26 +65,29 @@ class GameData implements BaseGameStateInterface
     public function setCurrentRoom(int $roomId): self
     {
         $this->currentRoom = $roomId;
+
         return $this;
     }
 
-    public function updateTurns(): void {
+    public function updateTurns(): void
+    {
         $this->turns++;
     }
 
-    public function getTurns() {
+    public function getTurns()
+    {
         return $this->turns;
     }
-
 
     public function setCurrentTurn(int $turn): self
     {
         $this->currentTurn = $turn;
+
         return $this;
     }
 
-    public function getCurrentTurn(): int {
+    public function getCurrentTurn(): int
+    {
         return $this->currentTurn;
     }
-
 }

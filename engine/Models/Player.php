@@ -2,17 +2,16 @@
 
 namespace Engine\Models;
 
-class Player extends AbstractModel {
-
+class Player extends AbstractModel
+{
     public function __construct()
     {
-        $this->position = new Position();
+        $this->position = new Position;
     }
 
-    public function setPlayerPosition($x, $y) {
+    public function setPlayerPosition($x, $y)
+    {
         $this->position->setX($x);
         $this->position->setY($y);
     }
-
-
 }
