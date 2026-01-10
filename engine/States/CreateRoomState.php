@@ -45,10 +45,15 @@ class CreateRoomState extends AbstractState implements StateInterface
 
     public function createMonsters() {
         $map = $this->room->getMap();
+        $mapHeight = count($map);
+        $mapWidth = count($map[0]);
 
         for($x=1;$x < 3;$x++) {
             $enemy = new ZombieWarrior(100);
-            $this->room->addEnemny(new ZombieWarrior(100));
+            $x = rand(0, $mapWidth);
+            $y = rand(0, $mapHeight);
+            $enemy->setPosition($x, $y);
+            $this->room->addEnemny($enemy);
         }
     }
 }
