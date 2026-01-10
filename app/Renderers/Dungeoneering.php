@@ -72,6 +72,8 @@ class Dungeoneering
         fwrite(STDOUT, 'Player');
         fwrite(STDOUT, str_repeat('█', $max));
         fwrite(STDOUT, $player->getMaxHealth());
+        fwrite(STDOUT, $player->getHealth());
+        
         if(!$player->getAttackingEnemy()) {
             fwrite(STDOUT, PHP_EOL);
 

@@ -13,8 +13,8 @@ class BasicSword extends AbstractWeapon
 
         $this->weaponType = Weapons::WEAPONTYPE_SWORD;
 
-        $this->damage = 40;
+        $this->maxDamage = 40;
 
-        $this->hitChange = 30;
+        $this->hitChance = 30;
     }
 }

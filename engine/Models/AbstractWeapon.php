@@ -8,7 +8,16 @@ class AbstractWeapon
 
     protected string $weaponType;
 
-    protected int $hitChange;
+    protected int $hitChance;
 
-    protected int $damage;
+    protected int $maxDamage;
+
+
+    public function getHitChance() {
+        return $this->hitChance;
+    }
+
+    public function getMaxDamage():int {
+        return $this->maxDamage;
+    }
 }
