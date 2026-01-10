@@ -42,4 +42,12 @@ class Room
         $this->items[] = $item;
         return $this;
     }
+
+    public function getItems(): array {
+        return $this->items;
+    }
+
+    public function removeItem($itemId): void {
+        unset($this->items[$itemId]);
+    }
 }

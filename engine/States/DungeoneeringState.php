@@ -51,38 +51,60 @@ class DungeoneeringState extends AbstractState implements StateInterface
             $this->movement($x, $y);
         }
 
+        if(is_integer($input)) {
+            $this->useInventoryItem($input);
+        }
         $this->detectCombat();
+        $this->detectItem();
 
     }
 
-    protected function detectCombat() {
-        
+    protected function detectItem()
+    {
         $room = $this->gameData->getCurrentRoom();
         $player = $this->gameData->getPlayer();
         $pPosition = $player->getPosition();
-        foreach($room->getEnemies() as $key => $e) {
+        foreach ($room->getItems() as $key => $i) {
+            $iPosition = $i->getPosition();
+            if ($iPosition->getX() == $pPosition->getX() && $iPosition->getY() == $pPosition->getY()) {
+                if (! $player->usedMaxInventory()) {
+                    $player->getInventory()->addItem($i);
+                    $room->removeItem($key);
+                }
+            }
+
+        }
+    }
+
+    protected function detectCombat()
+    {
+
+        $room = $this->gameData->getCurrentRoom();
+        $player = $this->gameData->getPlayer();
+        $pPosition = $player->getPosition();
+        foreach ($room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
-            if($ePosition->getX() == $pPosition->getX() && $ePosition->getY() == $pPosition->getY()){
+            if ($ePosition->getX() == $pPosition->getX() && $ePosition->getY() == $pPosition->getY()) {
                 $player->isAttackingEnemy($e);
                 $dmg = $player->attack();
                 $player->damage($dmg);
 
                 $dmg = $player->attack();
                 $e->damage($dmg);
-                if($e->isDeath()){
+                if ($e->isDeath()) {
                     $room->removeEnemy($key);
                 }
 
-                if($player->isDeath()) {
+                if ($player->isDeath()) {
                     $this->gameData->setState(new GameOverState);
 
                 }
-
 
             }
 
         }
     }
+
     protected function movement($x, $y): void
     {
         if (! $this->detectBlocking($x, $y)) {
@@ -194,5 +216,16 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
 
         return false;
+    }
+
+    protected function useInventoryItem(int $id):void {
+
+        $player = $this->gameData->getPlayer();
+        $items = $player->getInventory()->getItems();
+        foreach($items as $key => $item) {
+            if($id == $key + 1) {
+                $player->useItem($key);
+            }
+        }
     }
 }
