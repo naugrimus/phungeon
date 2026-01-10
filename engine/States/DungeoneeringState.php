@@ -55,7 +55,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function movement($x, $y)
     {
-        if (! $this->detectBlocking($x, $y)) {
+        if (!$this->detectBlocking($x, $y)) {
             $this->gameData->getPlayer()->getPosition()->setY($y);
             $this->gameData->getPlayer()->getPosition()->setX($x);
 
@@ -78,19 +78,19 @@ class DungeoneeringState extends AbstractState implements StateInterface
             $eDiff = $this->checkRelativePosition($player->getPosition()->getX(), $enemyPosition->getX());
             $ex = $enemyPosition->getX() + $eDiff;
 
-            if($this->isPlayerPosition($ex, $enemyPosition->getY())) {
-                echo 'playerpos';
+            if ($this->isPlayerPosition($ex, $enemyPosition->getY())) {
                 continue;
             }
-            if (! $this->detectBlocking($ex, $enemyPosition->getY())) {
+
+            if ($this->canMoveEnemy($ex, $enemyPosition->getY())) {
                 $enemyPosition->setX($ex);
             } else {
                 $eDiff = $this->checkRelativePosition($player->getPosition()->getY(), $enemyPosition->getY());
                 $ey = $enemyPosition->getY() + $eDiff;
-                if($this->isPlayerPosition($enemyPosition->getX(), $ey)) {
+                if ($this->isPlayerPosition($enemyPosition->getX(), $ey)) {
                     continue;
                 }
-                if (! $this->detectBlocking($enemyPosition->getX(), $ey)) {
+                if ($this->canMoveEnemy($enemyPosition->getX(), $ey)) {
                     $enemyPosition->setY($ey);
                 }
 
@@ -100,6 +100,33 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
+    protected function isEnemyPosition($x, $y):bool
+    {
+        $room = $this->gameData->getCurrentRoom();
+
+        foreach ($room->getEnemies() as $enemy) {
+            $position = $enemy->getPosition();
+            if ($position->getX() === $x && $position->getY() === $y) {
+
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    protected function canMoveEnemy($x, $y): bool
+    {
+
+
+        if($this->detectBlocking($x, $y)){
+            return false;
+        }
+        if ($this->isEnemyPosition($x, $y)){
+            $result =  false;
+        }
+        return true;
+    }
     protected function isPlayerPosition($x, $y): bool {
         $postion = $this->gameData->getPlayer()->getPosition();
         return $postion->getX() == $x && $postion->getY() == $y;
