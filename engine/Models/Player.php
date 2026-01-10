@@ -7,6 +7,7 @@ class Player extends AbstractModel
 
     protected ?AbstractEnemy $attackingEnemy = null;
     public function isAttackingEnemy (AbstractEnemy $enemy): void {
+        $this->health= 211;
         $this->attackingEnemy = $enemy;
     }
 

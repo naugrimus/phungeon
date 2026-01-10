@@ -69,9 +69,6 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
                 $dmg = $player->attack();
                 $e->damage($dmg);
-
-            } else {
-                $player->noAttack();
             }
 
         }
