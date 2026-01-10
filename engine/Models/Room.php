@@ -30,4 +30,9 @@ class Room
     {
         return $this->enemies;
     }
+
+    public function removeEnemy(int $enemyId): void
+    {
+        unset($this->enemies[$enemyId]);
+    }
 }

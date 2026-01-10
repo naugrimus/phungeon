@@ -48,7 +48,7 @@ class Dungeoneering
                 if (! $elementRendered) {
                     fwrite(STDOUT, $value);
                 }
-                //            fwrite(STDOUT, $value);
+
 
             }
             if ($x != count($row)) {
