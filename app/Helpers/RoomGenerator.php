@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\enums\Elements;
+use Engine\Models\Items\HealtPotion;
 
 class RoomGenerator
 {
@@ -76,6 +77,8 @@ class RoomGenerator
         $this->room[intval($this->height / 2)][$this->width - 1] = Elements::FLOOR;
 
     }
+
+
 
 
 }
