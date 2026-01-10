@@ -15,15 +15,21 @@ class renderFactory
         $renderer = match ($gameData->getState()->getName()) {
             'Intro' => new Intro,
             'Dungeoneering' => new Dungeoneering,
-            'default' => throw new \Exception('Invalid gameState'),
+            'CreateRoom' => false
         };
 
         if ($gameData->getTurns() != $gameData->getCurrentTurn() || $gameData->getTurns() == 0) {
             $gameData->setCurrentTurn($gameData->getTurns());
             $this->currentState = $gameData->getState()->getName();
-            $renderer->render($gameData);
+            if ($renderer) {
+                echo $gameData->getState()->getName();
+                $renderer->render($gameData);
+
+            } else {
+                echo $gameData->getState()->getName();
+            }
 
         }
-
     }
+
 }

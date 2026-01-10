@@ -69,7 +69,6 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $rooms = $this->gameData->getRooms();
         $room = $rooms[$this->gameData->getCurrentRoom()];
         $map = $room->getMap();
-
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {
                 if ($row == $playerY && $char == Elements::WALL && $col == $playerX) {
