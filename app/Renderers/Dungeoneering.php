@@ -20,7 +20,7 @@ class Dungeoneering
         $room = $gameData->getCurrentRoom();
 
         // player status bar
-        $this->createHealthBar();
+        $this->createStatusBar();
 
         foreach ($room->getmap() as $y => $row) {
             // $rowData = str_split($row);
@@ -65,15 +65,25 @@ class Dungeoneering
 
     }
 
-    protected function createHealthBar() {
+    protected function createStatusBar() {
+
+
         $player = $this->gameData->getPlayer();
 
         $max = $player->getMaxHealth()/100;
         fwrite(STDOUT, 'Player');
+        if($player->getAttackingEnemy()) {
+            fwrite(STDOUT, str_repeat(' ' , 3));
+            fwrite(STDOUT, '|');
+            fwrite(STDOUT, 'Enemy');
+        }
+        fwrite(STDOUT, PHP_EOL);
+
         fwrite(STDOUT, str_repeat('█', $max));
-        fwrite(STDOUT, $player->getMaxHealth());
         fwrite(STDOUT, $player->getHealth());
-        
+        fwrite(STDOUT, '/');
+        fwrite(STDOUT, $player->getMaxHealth());
+
         if(!$player->getAttackingEnemy()) {
             fwrite(STDOUT, PHP_EOL);
 

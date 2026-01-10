@@ -20,7 +20,7 @@ class Room
         return $this->map;
     }
 
-    public function addEnemny(AbstractEnemy $enemy): self
+    public function addEnemy(AbstractEnemy $enemy): self
     {
         $this->enemies[] = $enemy;
         return $this;
