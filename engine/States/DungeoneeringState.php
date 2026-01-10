@@ -19,56 +19,98 @@ class DungeoneeringState extends AbstractState implements StateInterface
     {
         $this->gameData = $gameData;
         $this->inputHandler = $inputHandler;
-        $this->detectMovemnet();
+        $this->detectMovement();
 
     }
 
-    protected function detectMovemnet(): void
+    protected function detectMovement(): void
     {
         // read the input
         $y = $this->gameData->getPlayer()->getPosition()->getY();
         $x = $this->gameData->getPlayer()->getPosition()->getX();
 
-        switch ($this->inputHandler::read()) {
+        $input = $this->inputHandler::read();
+
+        $movementInput = ['a', 'w', 's', 'd'];
+        switch ($input) {
             case 'w':
                 $y--;
-
-                if (! $this->detectBlocking($x, $y)) {
-                    $this->gameData->getPlayer()->getPosition()->setY($y);
-                    $this->gameData->updateTurns();
-                }
-
                 break;
             case 's':
                 $y++;
-                if (! $this->detectBlocking($x, $y)) {
-                    $this->gameData->getPlayer()->getPosition()->setY($y);
-                    $this->gameData->updateTurns();
-                }
                 break;
             case 'a':
                 $x--;
-                if (! $this->detectBlocking($x, $y)) {
-                    $this->gameData->getPlayer()->getPosition()->setX($x);
-                    $this->gameData->updateTurns();
-                }
                 break;
             case 'd':
                 $x++;
-                if (! $this->detectBlocking($x, $y)) {
-                    $this->gameData->getPlayer()->getPosition()->setX($x);
-                    $this->gameData->updateTurns();
-                }
-                break;
+
+        }
+
+        if (in_array($input, $movementInput)) {
+            $this->movement($x, $y);
         }
 
     }
 
+    protected function movement($x, $y)
+    {
+        if (! $this->detectBlocking($x, $y)) {
+            $this->gameData->getPlayer()->getPosition()->setY($y);
+            $this->gameData->getPlayer()->getPosition()->setX($x);
+
+            // now move the enemies
+            $this->moveEnemies();
+            $this->gameData->updateTurns();
+        }
+    }
+
+    protected function moveEnemies()
+    {
+        $room = $this->gameData->getCurrentRoom();
+
+        $player = $this->gameData->getPlayer();
+        foreach ($room->getEnemies() as $enemy) {
+            $enemyPosition = $enemy->getPosition();
+            // check if the horizontal position of the enemie should be moved
+
+            $eDiff = $this->checkRelativePosition($player->getPosition()->getX(), $enemyPosition->getX());
+            $ex = $enemyPosition->getX() + $eDiff;
+            if (! $this->detectBlocking($ex, $enemyPosition->getY())) {
+                $enemyPosition->setX($ex);
+            } else {
+                $eDiff = $this->checkRelativePosition($player->getPosition()->getY(), $enemyPosition->getY());
+                $ey = $enemyPosition->getY() + $eDiff;
+                if (! $this->detectBlocking($enemyPosition->getX(), $ey)) {
+                    $enemyPosition->setY($ey);
+                }
+
+            }
+
+        }
+
+    }
+
+    protected function checkRelativePosition($first, $second): int
+    {
+        if ($first === $second) {
+            return 0;
+        }
+
+        if ($first < $second) {
+            return -1;
+        }
+
+        if ($first > $second) {
+            return 1;
+        }
+    }
+
     protected function detectBlocking($playerX, $playerY): bool
     {
-        $rooms = $this->gameData->getRooms();
-        $room = $rooms[$this->gameData->getCurrentRoomId()];
+        $room = $this->gameData->getCurrentRoom();
         $map = $room->getMap();
+
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {
                 if ($row == $playerY && $char == Elements::WALL && $col == $playerX) {
