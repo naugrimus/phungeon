@@ -15,7 +15,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected ?InputHandler $inputHandler;
 
-    public function handle(GameData $gameData, InputHandler $inputHandler)
+    public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
         $this->gameData = $gameData;
         $this->inputHandler = $inputHandler;
@@ -51,9 +51,29 @@ class DungeoneeringState extends AbstractState implements StateInterface
             $this->movement($x, $y);
         }
 
+        $this->detectCombat();
+
     }
 
-    protected function movement($x, $y)
+    protected function detectCombat() {
+
+        $room = $this->gameData->getCurrentRoom();
+        $player = $this->gameData->getPlayer();
+        $pPosition = $player->getPosition();
+        foreach($room->getEnemies() as $e) {
+            $ePosition = $e->getPosition();
+            if($ePosition->getX() == $pPosition->getX() && $ePosition->getY() == $pPosition->getY()){
+                $player->isAttackingEnemy($e);
+                $dmg = $player->attack();
+                $player->damage($dmg);
+
+                $dmg = $player->attack();
+                $e->damage($dmg);
+            }
+
+        }
+    }
+    protected function movement($x, $y): void
     {
         if (! $this->detectBlocking($x, $y)) {
             $this->gameData->getPlayer()->getPosition()->setY($y);
@@ -65,23 +85,37 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
     }
 
-    protected function moveEnemies()
+    protected function moveEnemies(): void
     {
         $room = $this->gameData->getCurrentRoom();
 
         $player = $this->gameData->getPlayer();
         foreach ($room->getEnemies() as $enemy) {
+
             $enemyPosition = $enemy->getPosition();
-            // check if the horizontal position of the enemie should be moved
+            // check if the horizontal position of the enemy should be moved
 
             $eDiff = $this->checkRelativePosition($player->getPosition()->getX(), $enemyPosition->getX());
             $ex = $enemyPosition->getX() + $eDiff;
-            if (! $this->detectBlocking($ex, $enemyPosition->getY())) {
+
+            if ($this->isPlayerPosition($ex, $enemyPosition->getY())) {
+                continue;
+            } else {
+                $player->noAttack();
+            }
+
+            if ($this->canMoveEnemy($ex, $enemyPosition->getY())) {
                 $enemyPosition->setX($ex);
             } else {
                 $eDiff = $this->checkRelativePosition($player->getPosition()->getY(), $enemyPosition->getY());
                 $ey = $enemyPosition->getY() + $eDiff;
-                if (! $this->detectBlocking($enemyPosition->getX(), $ey)) {
+                if ($this->isPlayerPosition($enemyPosition->getX(), $ey)) {
+                    continue;
+                } else {
+                    $player->noAttack();
+
+                }
+                if ($this->canMoveEnemy($enemyPosition->getX(), $ey)) {
                     $enemyPosition->setY($ey);
                 }
 
@@ -91,29 +125,59 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
+    protected function isEnemyPosition($x, $y): bool
+    {
+        $room = $this->gameData->getCurrentRoom();
+
+        foreach ($room->getEnemies() as $enemy) {
+            $position = $enemy->getPosition();
+            if ($position->getX() === $x && $position->getY() === $y) {
+
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    protected function canMoveEnemy($x, $y): bool
+    {
+
+        if ($this->detectBlocking($x, $y)) {
+            return false;
+        }
+        if ($this->isEnemyPosition($x, $y)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function isPlayerPosition($x, $y): bool
+    {
+        $position = $this->gameData->getPlayer()->getPosition();
+
+        return $position->getX() == $x && $position->getY() == $y;
+    }
+
     protected function checkRelativePosition($first, $second): int
     {
         if ($first === $second) {
             return 0;
         }
 
-        if ($first < $second) {
-            return -1;
-        }
-
-        if ($first > $second) {
-            return 1;
-        }
+        return $first < $second ? -1 : 1;
     }
 
-    protected function detectBlocking($playerX, $playerY): bool
+    protected function detectBlocking($x, $y): bool
     {
         $room = $this->gameData->getCurrentRoom();
         $map = $room->getMap();
 
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {
-                if ($row == $playerY && $char == Elements::WALL && $col == $playerX) {
+                if ($row == $y && $char == Elements::WALL && $col == $x) {
                     return true;
                 }
             }

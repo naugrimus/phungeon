@@ -8,7 +8,7 @@ class ZombieWarrior extends AbstractEnemy
 {
     public function __construct(int $health)
     {
-        parent::__construct();
+        parent::__construct($health);
         $this->health = $health;
 
         $this->type = 'ZombieWarrior';

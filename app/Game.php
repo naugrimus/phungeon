@@ -30,7 +30,7 @@ class Game
         $gameData = new GameData;
         $gameData->setState(new IntroState);
 
-        $gameData->setPlayer(new Player);
+        $gameData->setPlayer(new Player(500));
 
         $factory = new StateFactory;
 

@@ -8,13 +8,19 @@ use App\enums\AnsiiConstants;
 
 class Dungeoneering
 {
+    protected GameData $gameData;
+
     public function render(GameData $gameData): void
     {
+        $this->gameData = $gameData;
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
         fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
-        $room = $gameData->getRooms()[$gameData->getCurrentRoomId()];
+        $room = $gameData->getCurrentRoom();
+
+        // player status bar
+        $this->createStatusBar();
 
         foreach ($room->getmap() as $y => $row) {
             // $rowData = str_split($row);
@@ -22,25 +28,31 @@ class Dungeoneering
                 $elementRendered = false;
                 if ($x == $gameData->getPlayer()->getPosition()->getX() &&
                     $y == $gameData->getPlayer()->getPosition()->getY()) {
-                    fwrite(STDOUT, Elements::PLAYER);
+                    fwrite(STDOUT, "\033[32m" . Elements::PLAYER . "\033[37m");
                     $elementRendered = true;
                 }
 
-                foreach($room->getEnemies() as $enemy) {
+                foreach ($room->getEnemies() as $enemy) {
                     if ($x == $enemy->getPosition()->getX() &&
                         $y == $enemy->getPosition()->getY()) {
-                        fwrite(STDOUT, Elements::ENEMY);
-                        $elementRendered = true;
+                        if ($gameData->getPlayer()->getPosition()->getX() != $enemy->getPosition()->getX() ||
+                            $gameData->getPlayer()->getPosition()->getY() != $enemy->getPosition()->getY()) {
+                            fwrite(STDOUT, "\033[91m" . Elements::ENEMY .  "\033[37m");
+                            $elementRendered = true;
+
+                        } else {
+                            $elementRendered = true;
+                        }
                     }
                 }
                 if (! $elementRendered) {
-                    fwrite(STDIN, $value);
+                    fwrite(STDOUT, $value);
                 }
                 //            fwrite(STDOUT, $value);
 
             }
             if ($x != count($row)) {
-                fwrite(STDIN, PHP_EOL);
+                fwrite(STDOUT, PHP_EOL);
             }
 
         }
@@ -51,5 +63,59 @@ class Dungeoneering
         fwrite(STDOUT, 'room char under player:' . $room->getmap()[$gameData->getPlayer()->getPosition()->getY() + 1][$gameData->getPlayer()->getPosition()->getX()] . PHP_EOL);
         fwrite(STDOUT, 'room char left player:' . $room->getmap()[$gameData->getPlayer()->getPosition()->getY()][$gameData->getPlayer()->getPosition()->getX() - 1] . PHP_EOL);
 
+    }
+
+    protected function createStatusBar()
+    {
+
+        $player = $this->gameData->getPlayer();
+        $map = $this->gameData->getCurrentRoom()->getMap();
+        $row = $map[0];
+        $length = count($row);
+
+        $max = $player->getMaxHealth();
+        fwrite(STDOUT, 'Player');
+        if ($player->getAttackingEnemy()) {
+
+            fwrite(STDOUT, str_repeat(' ', intval($length / 2)) . '|');
+            fwrite(STDOUT, 'Enemy');
+        }
+        fwrite(STDOUT, PHP_EOL);
+
+        fwrite(STDOUT, 'Health: ');
+        fwrite(STDOUT, $this->drawHealthBar($player->getHealth(), $max));
+
+        if ($player->getAttackingEnemy()) {
+
+            fwrite(STDOUT, str_repeat(' ', intval($length / 2) - 22). '|');
+            fwrite(STDOUT, $this->drawHealthBar($player->getAttackingEnemy()->getHealth(), $player->getAttackingEnemy()->getMaxHealth()));
+        }
+        fwrite(STDOUT, PHP_EOL);
+
+    }
+
+    function drawHealthBar(int $current, int $max, int $width = 20): string
+    {
+        $ratio = $current / $max;
+        $filled = (int) round($ratio * $width);
+        $empty  = $width - $filled;
+
+        if ($ratio > 0.6) {
+            $color = "\033[32m"; // green
+        } elseif ($ratio > 0.3) {
+            $color = "\033[33m"; // yellow
+        } else {
+            $color = "\033[31m"; // red
+        }
+
+        $reset = "\033[0m";
+
+        return sprintf(
+            "%s%s%s%s",
+            $color,
+            str_repeat("█", $filled),
+            $reset,
+            str_repeat("░", $empty)
+        );
     }
 }
