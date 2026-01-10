@@ -28,4 +28,9 @@ class AbstractModel
         $this->position->setX($x);
         $this->position->setY($y);
     }
+
+    public function getMaxHealth(): int
+    {
+        return $this->maxHealth;
+    }
 }

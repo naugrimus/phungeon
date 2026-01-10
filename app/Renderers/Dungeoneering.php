@@ -8,8 +8,11 @@ use App\enums\AnsiiConstants;
 
 class Dungeoneering
 {
+    protected GameData $gameData;
+
     public function render(GameData $gameData): void
     {
+        $this->gameData = $gameData;
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
@@ -17,6 +20,7 @@ class Dungeoneering
         $room = $gameData->getCurrentRoom();
 
         // player status bar
+        $this->createHealthBar();
 
         foreach ($room->getmap() as $y => $row) {
             // $rowData = str_split($row);
@@ -24,25 +28,31 @@ class Dungeoneering
                 $elementRendered = false;
                 if ($x == $gameData->getPlayer()->getPosition()->getX() &&
                     $y == $gameData->getPlayer()->getPosition()->getY()) {
-                    fwrite(STDOUT, Elements::PLAYER);
+                    fwrite(STDOUT, "\033[32m" . Elements::PLAYER . "\033[37m");
                     $elementRendered = true;
                 }
 
                 foreach($room->getEnemies() as $enemy) {
                     if ($x == $enemy->getPosition()->getX() &&
                         $y == $enemy->getPosition()->getY()) {
-                        fwrite(STDOUT, Elements::ENEMY);
-                        $elementRendered = true;
+                        if($gameData->getPlayer()->getPosition()->getX() != $enemy->getPosition()->getX() ||
+                            $gameData->getPlayer()->getPosition()->getY() != $enemy->getPosition()->getY()) {
+                            fwrite(STDOUT, Elements::ENEMY);
+                            $elementRendered = true;
+
+                        } else {
+                            $elementRendered = true;
+                        }
                     }
                 }
                 if (! $elementRendered) {
-                    fwrite(STDIN, $value);
+                    fwrite(STDOUT, $value);
                 }
                 //            fwrite(STDOUT, $value);
 
             }
             if ($x != count($row)) {
-                fwrite(STDIN, PHP_EOL);
+                fwrite(STDOUT, PHP_EOL);
             }
 
         }
@@ -53,5 +63,13 @@ class Dungeoneering
         fwrite(STDOUT, 'room char under player:' . $room->getmap()[$gameData->getPlayer()->getPosition()->getY() + 1][$gameData->getPlayer()->getPosition()->getX()] . PHP_EOL);
         fwrite(STDOUT, 'room char left player:' . $room->getmap()[$gameData->getPlayer()->getPosition()->getY()][$gameData->getPlayer()->getPosition()->getX() - 1] . PHP_EOL);
 
+    }
+
+    protected function createHealthBar() {
+        $player = $this->gameData->getPlayer();
+
+        $max = $player->getMaxHealth()/100;
+        fwrite(STDOUT, str_repeat('█', $max));
+        fwrite(STDOUT, $player->getMaxHealth() . PHP_EOL);
     }
 }

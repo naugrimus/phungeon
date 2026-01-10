@@ -16,8 +16,8 @@ class RoomGenerator
 
     public function __construct()
     {
-        $this->width = 45;
-        $this->height = 25;
+        $this->width = 15;
+        $this->height = 7;
         $this->carveDirections = [
             [0, -2],
             [0, 2],
