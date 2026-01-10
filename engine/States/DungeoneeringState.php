@@ -60,7 +60,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $room = $this->gameData->getCurrentRoom();
         $player = $this->gameData->getPlayer();
         $pPosition = $player->getPosition();
-        foreach($room->getEnemies() as $e) {
+        foreach($room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
             if($ePosition->getX() == $pPosition->getX() && $ePosition->getY() == $pPosition->getY()){
                 $player->isAttackingEnemy($e);
@@ -69,6 +69,11 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
                 $dmg = $player->attack();
                 $e->damage($dmg);
+                if($e->isDeath()){
+                    $room->removeEnemy($key);
+                }
+
+
             }
 
         }
