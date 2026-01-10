@@ -4,11 +4,17 @@ namespace Engine\Models;
 
 class AbstractModel
 {
-    public function __construct()
+    protected int $health;
+
+    protected int $maxHealth;
+
+    public function __construct(int $health)
     {
+        $this->health = $health;
+        $this->maxHealth = $health;
+
         $this->position = new Position;
     }
-    protected int $health;
 
     protected Position $position;
 

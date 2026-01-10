@@ -14,7 +14,9 @@ class Dungeoneering
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
         fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
-        $room = $gameData->getRooms()[$gameData->getCurrentRoomId()];
+        $room = $gameData->getCurrentRoom();
+
+        // player status bar
 
         foreach ($room->getmap() as $y => $row) {
             // $rowData = str_split($row);
