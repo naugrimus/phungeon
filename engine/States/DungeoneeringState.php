@@ -15,7 +15,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected ?InputHandler $inputHandler;
 
-    public function handle(GameData $gameData, InputHandler $inputHandler)
+    public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
         $this->gameData = $gameData;
         $this->inputHandler = $inputHandler;
@@ -53,9 +53,9 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
-    protected function movement($x, $y)
+    protected function movement($x, $y): void
     {
-        if (!$this->detectBlocking($x, $y)) {
+        if (! $this->detectBlocking($x, $y)) {
             $this->gameData->getPlayer()->getPosition()->setY($y);
             $this->gameData->getPlayer()->getPosition()->setX($x);
 
@@ -65,7 +65,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
     }
 
-    protected function moveEnemies()
+    protected function moveEnemies(): void
     {
         $room = $this->gameData->getCurrentRoom();
 
@@ -73,7 +73,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         foreach ($room->getEnemies() as $enemy) {
 
             $enemyPosition = $enemy->getPosition();
-            // check if the horizontal position of the enemie should be moved
+            // check if the horizontal position of the enemy should be moved
 
             $eDiff = $this->checkRelativePosition($player->getPosition()->getX(), $enemyPosition->getX());
             $ex = $enemyPosition->getX() + $eDiff;
@@ -88,6 +88,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 $eDiff = $this->checkRelativePosition($player->getPosition()->getY(), $enemyPosition->getY());
                 $ey = $enemyPosition->getY() + $eDiff;
                 if ($this->isPlayerPosition($enemyPosition->getX(), $ey)) {
+
                     continue;
                 }
                 if ($this->canMoveEnemy($enemyPosition->getX(), $ey)) {
@@ -100,7 +101,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
-    protected function isEnemyPosition($x, $y):bool
+    protected function isEnemyPosition($x, $y): bool
     {
         $room = $this->gameData->getCurrentRoom();
 
@@ -111,6 +112,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 return true;
             }
         }
+
         return false;
 
     }
@@ -118,18 +120,21 @@ class DungeoneeringState extends AbstractState implements StateInterface
     protected function canMoveEnemy($x, $y): bool
     {
 
-
-        if($this->detectBlocking($x, $y)){
+        if ($this->detectBlocking($x, $y)) {
             return false;
         }
-        if ($this->isEnemyPosition($x, $y)){
-            $result =  false;
+        if ($this->isEnemyPosition($x, $y)) {
+            return false;
         }
+
         return true;
     }
-    protected function isPlayerPosition($x, $y): bool {
-        $postion = $this->gameData->getPlayer()->getPosition();
-        return $postion->getX() == $x && $postion->getY() == $y;
+
+    protected function isPlayerPosition($x, $y): bool
+    {
+        $position = $this->gameData->getPlayer()->getPosition();
+
+        return $position->getX() == $x && $position->getY() == $y;
     }
 
     protected function checkRelativePosition($first, $second): int
@@ -138,13 +143,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
             return 0;
         }
 
-        if ($first < $second) {
-            return -1;
-        }
-
-        if ($first > $second) {
-            return 1;
-        }
+        return $first < $second ? -1 : 1;
     }
 
     protected function detectBlocking($x, $y): bool
