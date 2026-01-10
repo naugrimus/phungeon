@@ -67,7 +67,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
     protected function detectBlocking($playerX, $playerY): bool
     {
         $rooms = $this->gameData->getRooms();
-        $room = $rooms[$this->gameData->getCurrentRoom()];
+        $room = $rooms[$this->gameData->getCurrentRoomId()];
         $map = $room->getMap();
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {

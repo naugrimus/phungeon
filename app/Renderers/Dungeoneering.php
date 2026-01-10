@@ -14,20 +14,29 @@ class Dungeoneering
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
         fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
-        $room = $gameData->getRooms()[$gameData->getCurrentRoom()];
+        $room = $gameData->getRooms()[$gameData->getCurrentRoomId()];
 
         foreach ($room->getmap() as $y => $row) {
             // $rowData = str_split($row);
             foreach ($row as $x => $value) {
+                $elementRendered = false;
                 if ($x == $gameData->getPlayer()->getPosition()->getX() &&
-                 $y == $gameData->getPlayer()->getPosition()->getY()) {
+                    $y == $gameData->getPlayer()->getPosition()->getY()) {
                     fwrite(STDOUT, Elements::PLAYER);
-                } else {
-                    fwrite(STDIN, $value);
-
-                    //            fwrite(STDOUT, $value);
-
+                    $elementRendered = true;
                 }
+
+                foreach($room->getEnemies() as $enemy) {
+                    if ($x == $enemy->getPosition()->getX() &&
+                        $y == $enemy->getPosition()->getY()) {
+                        fwrite(STDOUT, Elements::ENEMY);
+                        $elementRendered = true;
+                    }
+                }
+                if (! $elementRendered) {
+                    fwrite(STDIN, $value);
+                }
+                //            fwrite(STDOUT, $value);
 
             }
             if ($x != count($row)) {

@@ -25,4 +25,9 @@ class Room
         $this->enemies[] = $enemy;
         return $this;
     }
+
+    public function getEnemies(): array
+    {
+        return $this->enemies;
+    }
 }
