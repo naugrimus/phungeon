@@ -56,7 +56,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
     }
 
     protected function detectCombat() {
-
+        
         $room = $this->gameData->getCurrentRoom();
         $player = $this->gameData->getPlayer();
         $pPosition = $player->getPosition();
@@ -71,6 +71,11 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 $e->damage($dmg);
                 if($e->isDeath()){
                     $room->removeEnemy($key);
+                }
+
+                if($player->isDeath()) {
+                    $this->gameData->setState(new GameOverState);
+
                 }
 
 

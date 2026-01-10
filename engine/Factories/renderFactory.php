@@ -2,6 +2,7 @@
 
 namespace Engine\Factories;
 
+use App\Renderers\GameOver;
 use App\Renderers\Intro;
 use App\Renderers\Dungeoneering;
 
@@ -15,7 +16,8 @@ class renderFactory
         $renderer = match ($gameData->getState()->getName()) {
             'Intro' => new Intro,
             'Dungeoneering' => new Dungeoneering,
-            'CreateRoom' => false
+            'CreateRoom' => false,
+            'GameOver' => new GameOver
         };
 
         if ($gameData->getTurns() != $gameData->getCurrentTurn() || $gameData->getTurns() == 0) {
