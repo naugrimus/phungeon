@@ -9,4 +9,6 @@ class Elements
     const PLAYER = '§';
 
     const FLOOR = ' ';
+
+    const ENEMY = '&';
 }

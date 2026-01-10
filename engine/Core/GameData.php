@@ -57,12 +57,12 @@ class GameData implements BaseGameStateInterface
         return $this;
     }
 
-    public function getCurrentRoom(): ?int
+    public function getCurrentRoomId(): ?int
     {
         return $this->currentRoom;
     }
 
-    public function setCurrentRoom(int $roomId): self
+    public function setCurrentRoomId(int $roomId): self
     {
         $this->currentRoom = $roomId;
 
@@ -89,5 +89,9 @@ class GameData implements BaseGameStateInterface
     public function getCurrentTurn(): int
     {
         return $this->currentTurn;
+    }
+
+    public function getCurrentRoom(): ?Room {
+        return $this->rooms[$this->currentRoom] ?? null;
     }
 }

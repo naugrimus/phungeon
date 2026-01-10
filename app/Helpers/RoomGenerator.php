@@ -67,14 +67,15 @@ class RoomGenerator
         return $this->room;
     }
 
-    protected function createExits()
+    protected function createExits(): void
     {
 
         $this->room[0][intval($this->width / 2)] = Elements::FLOOR;
         $this->room[intval($this->height / 2)][0] = Elements::FLOOR;
         $this->room[$this->height - 1][intval($this->width / 2)] = Elements::FLOOR;
         $this->room[intval($this->height / 2)][$this->width - 1] = Elements::FLOOR;
-        ;
 
     }
+
+
 }
