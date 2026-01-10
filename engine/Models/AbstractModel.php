@@ -2,11 +2,15 @@
 
 namespace Engine\Models;
 
+use Engine\Models\Weapons\BasicSword;
+
 class AbstractModel
 {
     protected int $health;
 
     protected int $maxHealth;
+
+    protected AbstractWeapon $weapon;
 
     public function __construct(int $health)
     {
@@ -14,6 +18,9 @@ class AbstractModel
         $this->maxHealth = $health;
 
         $this->position = new Position;
+
+        $this->weapon = new BasicSword;
+
     }
 
     protected Position $position;
