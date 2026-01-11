@@ -10,6 +10,8 @@ class Room
 
     protected array $enemies = [];
 
+    protected array $items = [];
+
     public function setMap(array $map): void
     {
         $this->map = $map;
@@ -34,5 +36,18 @@ class Room
     public function removeEnemy(int $enemyId): void
     {
         unset($this->enemies[$enemyId]);
+    }
+
+    public function addItem(AbstractItem $item): self {
+        $this->items[] = $item;
+        return $this;
+    }
+
+    public function getItems(): array {
+        return $this->items;
+    }
+
+    public function removeItem($itemId): void {
+        unset($this->items[$itemId]);
     }
 }

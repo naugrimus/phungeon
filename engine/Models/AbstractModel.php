@@ -2,10 +2,13 @@
 
 namespace Engine\Models;
 
+use Engine\Traits\PositionTrait;
 use Engine\Models\Weapons\BasicSword;
 
 class AbstractModel
 {
+    use PositionTrait;
+
     protected int $health;
 
     protected int $maxHealth;
@@ -25,67 +28,60 @@ class AbstractModel
 
     protected Position $position;
 
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    public function setPosition($x, $y)
-    {
-        $this->position->setX($x);
-        $this->position->setY($y);
-    }
-
     public function getMaxHealth(): int
     {
         return $this->maxHealth;
     }
 
-    public function attack() {
-        if(!$this->attackingEnemy) {
+    public function attack(): ?int
+    {
+        if (! $this->attackingEnemy) {
             return null;
         }
 
-        if($this->weapon) {
+        if ($this->weapon) {
             $hit = $this->calculateHit($this->weapon->getHitChance());
-            if($hit) {
+            if ($hit) {
                 return $this->calculateDamage($this->weapon->getMaxDamage());
             }
-
         }
+
+        return null;
     }
 
-    public function damage($damage) {
-        $this->health = $this->health-$damage;
-        if($this->health < 0) {
+    public function damage($damage)
+    {
+        $this->health = $this->health - $damage;
+        if ($this->health < 0) {
             $this->health = 0;
 
         }
     }
 
-
-    public function isDeath() {
+    public function isDeath()
+    {
         return $this->health <= 0;
     }
 
-    public function getHealth(): int {
+    public function getHealth(): int
+    {
         return $this->health;
     }
 
-
-
-
-    protected function calculateHit($hitchange): int {
+    protected function calculateHit($hitchange): int
+    {
 
         $change = random_int(0, $hitchange);
-        if($change < $hitchange) {
+        if ($change < $hitchange) {
             return true;
         }
+
         return false;
 
     }
 
-    protected function calculateDamage($maxDamge):int {
+    protected function calculateDamage($maxDamge): int
+    {
         return random_int(0, $maxDamge);
     }
 }

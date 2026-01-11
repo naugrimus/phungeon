@@ -11,4 +11,6 @@ class Elements
     const FLOOR = ' ';
 
     const ENEMY = '&';
+
+    const HEALTHPOTION = '*';
 }
