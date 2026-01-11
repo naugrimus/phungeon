@@ -2,8 +2,11 @@
 
 namespace Engine\Models;
 
+use Engine\Traits\PositionTrait;
 class Room
 {
+    use PositionTrait;
+
     protected Position $position;
 
     protected array $map = [];
@@ -12,6 +15,9 @@ class Room
 
     protected array $items = [];
 
+    public function __construct() {
+        $this->position = new Position;
+    }
     public function setMap(array $map): void
     {
         $this->map = $map;
@@ -55,4 +61,6 @@ class Room
     {
         unset($this->items[$itemId]);
     }
+
+
 }

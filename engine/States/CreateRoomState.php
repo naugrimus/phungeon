@@ -26,36 +26,72 @@ class CreateRoomState extends AbstractState implements StateInterface
         $this->gameData = $gameData;
 
         if (! $gameData->hasRoom()) {
-            $generator = new RoomGenerator;
-            $this->room = new Room;
-            $this->room->setMap($generator->generate());
-            $gameData->addRoom($this->room);
-            $gameData->setCurrentRoomId(0);
-            // set the player position
-
-            $this->setPlayerPosition($gameData->getPlayer());
-            $position = new Position;
-            $position->setX(0);
-            $position->setY(0);
-
+            $this->createNewRoom(0,0);
         } else {
-            $generator = new RoomGenerator;
-            $this->room = new Room;
-            $this->room->setMap($generator->generate());
-            $gameData->setCurrentRoomId(count($gameData->getRooms()));
+            $roomId = $this->getVisitedRoom($this->gameData->getCurrentRoom());
+            if($roomId) {
+               $gameData->setCurrentRoomId($roomId);
+               $this->room = $gameData->getRooms()[$roomId];
+               $this->setPlayerPosition($this->gameData->getPlayer());
 
-            $gameData->addRoom($this->room);
-
-            $this->setPlayerPosition($gameData->getPlayer());
-
+            } else {
+                $directions = $this->getDirections();
+                $this->createNewRoom($directions[0], $directions[1]);
+            }
         }
-        $this->createMonsters();
-        $this->createItems();
+
 
         $gameData->setState(new DungeoneeringState);
         $gameData->updateTurns();
     }
 
+    protected function createNewRoom($x,$y): void {
+        $generator = new RoomGenerator;
+        $this->room = new Room;
+        $this->room->setMap($generator->generate());
+        $this->gameData->addRoom($this->room);
+        $this->gameData->setCurrentRoomId(count($this->gameData->getRooms()));
+        $this->room->setPosition($x,$y);
+        $this->createMonsters();
+        $this->createItems();
+        $this->setPlayerPosition($this->gameData->getPlayer());
+
+    }
+
+    protected function getDirections() {
+        $position = $this->gameData->getCurrentRoom()->getPosition();
+        $x = $position->getX();
+        $y= $position->getY();
+        switch($this->gameData->getExit()) {
+            case 'north':
+                $y++;
+                break;
+            case 'south':
+                $y--;
+                break;
+            case'west':
+                $x--;
+                break;
+            case 'east':
+                $x++;
+                break;
+        }
+
+        return [$x, $y];
+    }
+    protected function getVisitedRoom(Room $currentRoom): ?int {
+
+
+        $directions = $this->getDirections();
+        $x = $directions[0];
+        $y = $directions[1];
+        foreach($this->gameData->getRooms() as $key => $room) {
+            if($room->getPosition()->getX() == $x && $room->getPosition()->getY() == $y) {
+                return $key;
+            }
+        }
+        return null;
+    }
     protected function setPlayerPosition(Player $player): void
     {
         $map = $this->room->getMap();
