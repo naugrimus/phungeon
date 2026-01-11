@@ -10,6 +10,7 @@ use App\Helpers\RoomGenerator;
 use Engine\Handlers\InputHandler;
 use Engine\Handlers\ElementCreator;
 use Engine\Interfaces\StateInterface;
+Use App\enums\Directions;
 
 class CreateRoomState extends AbstractState implements StateInterface
 {
@@ -44,7 +45,7 @@ class CreateRoomState extends AbstractState implements StateInterface
         $gameData->updateTurns();
     }
 
-    protected function createNewRoom($x, $y): void
+    protected function createNewRoom(int $x, int $y): void
     {
         $generator = new RoomGenerator;
         $this->room = new Room;
@@ -59,22 +60,22 @@ class CreateRoomState extends AbstractState implements StateInterface
 
     }
 
-    protected function getDirections()
+    protected function getDirections(): array
     {
         $position = $this->gameData->getCurrentRoom()->getPosition();
         $x = $position->getX();
         $y = $position->getY();
         switch ($this->gameData->getExit()) {
-            case 'north':
+            case Directions::NORTH:
                 $y++;
                 break;
-            case 'south':
+            case Directions::SOUTH:
                 $y--;
                 break;
-            case 'west':
+            case Directions::WEST:
                 $x--;
                 break;
-            case 'east':
+            case Directions::EAST:
                 $x++;
                 break;
         }
@@ -108,19 +109,19 @@ class CreateRoomState extends AbstractState implements StateInterface
 
         switch ($this->gameData->getExit()) {
 
-            case 'north': // exited north → enter from south
+            case Directions::NORTH:
                 $player->setPosition($x, $mapHeight - 1);
                 break;
 
-            case 'south': // exited south → enter from north
+            case Directions::SOUTH:
                 $player->setPosition($x, 0);
                 break;
 
-            case 'east': // exited east → enter from west
+            case Directions::EAST:
                 $player->setPosition(0, $y);
                 break;
 
-            case 'west': // exited west → enter from east
+            case Directions::WEST:
                 $player->setPosition($mapWidth - 1, $y);
                 break;
 
