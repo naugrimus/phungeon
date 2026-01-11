@@ -77,16 +77,15 @@ class DungeoneeringState extends AbstractState implements StateInterface
         foreach ($room->getItems() as $key => $i) {
             $iPosition = $i->getPosition();
             if ($iPosition->getX() == $pPosition->getX() && $iPosition->getY() == $pPosition->getY()) {
-                if (! $player->usedMaxInventory()) {
+                if (!$player->usedMaxInventory()) {
                     $player->getInventory()->addItem($i);
                     $room->removeItem($key);
                 }
             }
-
-    protected function detectCombat() {
-
         }
     }
+
+    
 
     protected function detectCombat()
     {
