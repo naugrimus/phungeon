@@ -75,19 +75,18 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
-    protected function detectEnd()
+    protected function detectEnd(): void
     {
-        $pPosition = $this->player->getPosition();
         if ($this->room->hasEnd()) {
             $end = $this->room->getEnd();
 
             if ($this->player->getPosition()->isEqual($end->getPosition())) {
-                $this->gameData->setState(new GameOverState(true));
+                $this->gameData->setState(new GameOverState);
             }
         }
     }
 
-    protected function detectItem()
+    protected function detectItem(): void
     {
         $pPosition = $this->player->getPosition();
         foreach ($this->room->getItems() as $key => $i) {
@@ -101,10 +100,8 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
     }
 
-    protected function detectCombat()
+    protected function detectCombat(): void
     {
-
-        $pPosition = $this->player->getPosition();
         foreach ($this->room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
             if ($this->player->getPosition()->isEqual($ePosition)) {
@@ -119,7 +116,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 }
 
                 if ($this->player->isDeath()) {
-                    $this->gameData->setState(new GameOverState(false));
+                    $this->gameData->setState(new GameOverState);
 
                 }
 
@@ -296,12 +293,12 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
-    protected function getMapHeight()
+    protected function getMapHeight(): int
     {
         return count($this->room->getMap());
     }
 
-    protected function getMapWidth()
+    protected function getMapWidth(): int
     {
         return count($this->room->getMap()[0]);
     }

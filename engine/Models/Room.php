@@ -70,6 +70,7 @@ class Room
     public function addEndItem(EndItem $item): self
     {
         $this->endItem = $item;
+        return $this;
     }
 
     public function hasEnd(): bool

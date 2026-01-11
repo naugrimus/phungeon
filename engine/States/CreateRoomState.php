@@ -132,38 +132,28 @@ class CreateRoomState extends AbstractState implements StateInterface
 
     public function createMonsters()
     {
-        $map = $this->room->getMap();
-        $mapHeight = count($map);
-        $mapWidth = count($map[0]);
 
         for ($num = 1; $num < 7; $num++) {
             $enemy = new ZombieWarrior(100);
-            $x = rand(0, $mapWidth - 1);
-            $y = rand(0, $mapHeight - 1);
-            if ($map[$y][$x] == Elements::FLOOR) {
-                $enemy->setPosition($x, $y);
-                $this->room->addEnemy($enemy);
+            [$x, $y]  = $this->randomize();
 
-            }
+            $enemy->setPosition($x, $y);
+            $this->room->addEnemy($enemy);
 
         }
+
     }
 
-    protected function createItems()
+    protected function createItems(): void
     {
-        $map = $this->room->getMap();
-        $mapHeight = count($map);
-        $mapWidth = count($map[0]);
         for ($num = 1; $num < 12; $num++) {
             $item = new HealtPotion;
-            $x = rand(0, $mapWidth - 1);
-            $y = rand(0, $mapHeight - 1);
 
-            if ($map[$y][$x] == Elements::FLOOR) {
-                $item->setPosition($x, $y);
-                $this->room->addItem($item);
+            [$x, $y]  = $this->randomize();
 
-            }
+
+            $item->setPosition($x, $y);
+            $this->room->addItem($item);
 
         }
 
@@ -173,15 +163,34 @@ class CreateRoomState extends AbstractState implements StateInterface
     {
         $change = random_int(0, 20);
         if ($change < 20) {
-            $map = $this->room->getMap();
-            $mapHeight = count($map);
-            $mapWidth = count($map[0]);
-            if ($map[$y][$x] == Elements::FLOOR) {
-                $item = new EndItem;
-                $item->setPosition($x, $y);
-                $this->room->addEndItem($item);
+            $position = $this->randomize();
 
+            [$x, $y] = $position;
+
+            $item = new EndItem;
+            $item->setPosition($x, $y);
+            $this->room->addEndItem($item);
+
+        }
+    }
+
+    protected function randomize(): ?array
+    {
+
+        $map = $this->room->getMap();
+        $height = count($map);
+        $width = count($map[0]);
+
+        for ($i = 0; $i < 20; $i++) {
+            $x = rand(0, $width - 1);
+            $y = rand(0, $height - 1);
+
+            if ($map[$y][$x] === Elements::FLOOR) {
+                return [$x, $y];
             }
         }
+
+        return null;
+
     }
 }
