@@ -65,7 +65,9 @@ class DungeoneeringState extends AbstractState implements StateInterface
             $this->movement($position);
         }
 
-        if (is_int($input)) {
+
+        if (ctype_digit($input)) {
+
             $this->useInventoryItem($input);
         }
         $this->detectCombat();
@@ -232,9 +234,13 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $player = $this->gameData->getPlayer();
         $items = $player->getInventory()->getItems();
         foreach ($items as $key => $item) {
+
             if ($id == $key + 1) {
                 $player->useItem($key);
             }
         }
+
+        $this->gameData->updateTurns();
+
     }
 }

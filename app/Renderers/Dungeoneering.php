@@ -25,6 +25,7 @@ class Dungeoneering
         $this->player = $gameData->getPlayer();
         $this->room = $gameData->getCurrentRoom();
 
+        $items = $this->player->getInventory()->getItems();
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
@@ -88,6 +89,19 @@ class Dungeoneering
             fwrite(STDOUT, $this->drawHealthBar($player->getAttackingEnemy()->getHealth(), $player->getAttackingEnemy()->getMaxHealth()));
         }
         fwrite(STDOUT, PHP_EOL);
+
+
+        fwrite(STDOUT, 'Inventory:' . PHP_EOL);
+        $inventory = $this->player->getInventory()->getItems();
+        foreach ($inventory as $item) {
+            fwrite(STDOUT, $item->getDisplay());
+        }
+        fwrite(STDOUT, PHP_EOL);
+        for($x = 1; $x < 10; $x++) {
+            fwrite(STDOUT, $x);
+        }
+        fwrite(STDOUT, PHP_EOL);
+
 
     }
 

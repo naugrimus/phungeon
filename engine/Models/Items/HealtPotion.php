@@ -2,12 +2,14 @@
 
 namespace Engine\Models\Items;
 
+use App\enums\Elements;
 use Engine\Models\Player;
 use Engine\Models\AbstractItem;
 use Engine\Interfaces\HealthPotionInterface;
 
 class HealtPotion extends AbstractItem implements HealthPotionInterface
 {
+
     protected int $amount = 200;
 
     public function getAmount(): int
@@ -24,5 +26,9 @@ class HealtPotion extends AbstractItem implements HealthPotionInterface
             $player->setHealth($player->getMaxHealth());
         }
 
+    }
+
+    public function getDisplay(): string {
+        return Elements::HEALTHPOTION;
     }
 }

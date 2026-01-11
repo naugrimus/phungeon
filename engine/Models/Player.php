@@ -50,6 +50,7 @@ class Player extends AbstractModel
     {
         $item = $this->inventory->getItemById($itemId);
         $item->useByPlayer($this);
+        $this->inventory->removeItemById($itemId);
     }
 
     public function setHealth(int $health): self

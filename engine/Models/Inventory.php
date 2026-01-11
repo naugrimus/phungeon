@@ -20,4 +20,12 @@ class Inventory
         }
         return null;
     }
+
+    public function removeItemById(int $itemId): self {
+        if(isset($this->items[$itemId])) {
+            unset($this->items[$itemId]);
+
+        }
+        return $this;
+    }
 }

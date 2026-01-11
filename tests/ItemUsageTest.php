@@ -29,6 +29,8 @@ class ItemUsageTest extends TestCase {
         $player->setHealth('400');
         $item->useByPlayer($player);
         $this->assertEquals(500, $player->getHealth());
+        $this->assertCount(0, $player->getInventory()->getItems());
+
     }
 
 
