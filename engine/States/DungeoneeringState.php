@@ -6,6 +6,7 @@ use App\enums\Elements;
 use Engine\Core\GameData;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
+use Engine\Models\Position;
 
 class DungeoneeringState extends AbstractState implements StateInterface
 {
@@ -48,7 +49,10 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
 
         if (in_array($input, $movementInput)) {
-            $this->movement($x, $y);
+            $position = New Position();
+            $position->setX($x);
+            $position->setY($y);
+            $this->movement($position);
         }
 
         $this->detectCombat();
@@ -83,11 +87,11 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
         }
     }
-    protected function movement($x, $y): void
+    protected function movement(Position $position): void
     {
-        if (! $this->detectBlocking($x, $y)) {
-            $this->gameData->getPlayer()->getPosition()->setY($y);
-            $this->gameData->getPlayer()->getPosition()->setX($x);
+        if (! $this->detectBlocking($position)) {
+            $this->gameData->getPlayer()->getPosition()->setY($position->getY());
+            $this->gameData->getPlayer()->getPosition()->setX($position->getX());
 
             // now move the enemies
             $this->moveEnemies();
@@ -153,8 +157,10 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function canMoveEnemy($x, $y): bool
     {
-
-        if ($this->detectBlocking($x, $y)) {
+        $position = new Position();
+        $position->setX($x);
+        $position->setY($y);
+        if ($this->detectBlocking($position)) {
             return false;
         }
         if ($this->isEnemyPosition($x, $y)) {
@@ -180,14 +186,14 @@ class DungeoneeringState extends AbstractState implements StateInterface
         return $first < $second ? -1 : 1;
     }
 
-    protected function detectBlocking($x, $y): bool
+    protected function detectBlocking(Position $position): bool
     {
         $room = $this->gameData->getCurrentRoom();
         $map = $room->getMap();
 
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {
-                if ($row == $y && $char == Elements::WALL && $col == $x) {
+                if ($row == $position->getY() && $char == Elements::WALL && $col == $position->getX()) {
                     return true;
                 }
             }
