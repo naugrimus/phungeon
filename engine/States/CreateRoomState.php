@@ -50,7 +50,7 @@ class CreateRoomState extends AbstractState implements StateInterface
         $this->room = new Room;
         $this->room->setMap($generator->generate());
         $this->gameData->addRoom($this->room);
-        $this->gameData->setCurrentRoomId(count($this->gameData->getRooms()));
+        $this->gameData->setCurrentRoomId(count($this->gameData->getRooms()) -1);
         $this->room->setPosition($x,$y);
         $this->createMonsters();
         $this->createItems();
