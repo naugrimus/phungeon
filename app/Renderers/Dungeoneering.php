@@ -26,13 +26,11 @@ class Dungeoneering
 
         $this->room = $gameData->getCurrentRoom();
 
-        $items = $this->player->getInventory()->getItems();
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
         fwrite(STDOUT, AnsiiConstants::CLEARSCREEN);
 
-        // player status bar
         $this->createStatusBar();
 
         foreach ($this->room->getmap() as $y => $row) {

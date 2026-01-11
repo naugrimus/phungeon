@@ -7,11 +7,14 @@ use Engine\Models\Room;
 use Engine\Core\GameData;
 use Engine\Models\Player;
 use Engine\Models\Position;
+use Engine\Traits\MapTrait;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
 
 class DungeoneeringState extends AbstractState implements StateInterface
 {
+    use MapTrait;
+
     const NAME = 'Dungeoneering';
 
     protected ?GameData $gameData;
@@ -291,15 +294,5 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
         $this->gameData->updateTurns();
 
-    }
-
-    protected function getMapHeight(): int
-    {
-        return count($this->room->getMap());
-    }
-
-    protected function getMapWidth(): int
-    {
-        return count($this->room->getMap()[0]);
     }
 }

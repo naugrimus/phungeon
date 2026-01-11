@@ -12,9 +12,10 @@ use Engine\Handlers\InputHandler;
 use Engine\Models\Items\HealtPotion;
 use Engine\Interfaces\StateInterface;
 use Engine\Models\Enemies\ZombieWarrior;
-
+use Engine\Traits\MapTrait;
 class CreateRoomState extends AbstractState implements StateInterface
 {
+    use MapTrait;
     const NAME = 'CreateRoom';
 
     protected Room $room;
@@ -178,12 +179,10 @@ class CreateRoomState extends AbstractState implements StateInterface
     {
 
         $map = $this->room->getMap();
-        $height = count($map);
-        $width = count($map[0]);
 
         for ($i = 0; $i < 20; $i++) {
-            $x = rand(0, $width - 1);
-            $y = rand(0, $height - 1);
+            $x = rand(0, $this->getMapWidth() - 1);
+            $y = rand(0, $this->getMapHeight() - 1);
 
             if ($map[$y][$x] === Elements::FLOOR) {
                 return [$x, $y];
