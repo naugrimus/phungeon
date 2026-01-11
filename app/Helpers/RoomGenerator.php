@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\enums\Elements;
-use Engine\Models\Items\HealtPotion;
 
 class RoomGenerator
 {
@@ -39,7 +38,6 @@ class RoomGenerator
         $this->room[$startY][$startX] = Elements::FLOOR;
 
         $this->carve($startX, $startY, $this->carveDirections, $this->width, $this->height);
-
 
         $this->createExits();
 
@@ -99,8 +97,4 @@ class RoomGenerator
             }
         }
     }
-
-
-
-
 }

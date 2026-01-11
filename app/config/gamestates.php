@@ -1,7 +1,7 @@
 <?php
 
-use Engine\States\GameOverState;
 use Engine\States\IntroState;
+use Engine\States\GameOverState;
 use Engine\States\CreateRoomState;
 use Engine\States\DungeoneeringState;
 

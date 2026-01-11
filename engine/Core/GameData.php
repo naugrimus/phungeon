@@ -15,6 +15,14 @@ class GameData implements BaseGameStateInterface
 
     protected int $currentTurn = 0;
 
+    protected Player $player;
+
+    protected array $rooms = [];
+
+    protected ?string $exit = null;
+
+    protected ?int $currentRoomId = null;
+
     public function getState(): StateInterface
     {
         return $this->state;
@@ -26,12 +34,6 @@ class GameData implements BaseGameStateInterface
 
         return $this;
     }
-
-    protected Player $player;
-
-    protected array $rooms = [];
-
-    protected ?int $currentRoom = null;
 
     public function getRooms(): array
     {
@@ -57,14 +59,9 @@ class GameData implements BaseGameStateInterface
         return $this;
     }
 
-    public function getCurrentRoomId(): ?int
-    {
-        return $this->currentRoom;
-    }
-
     public function setCurrentRoomId(int $roomId): self
     {
-        $this->currentRoom = $roomId;
+        $this->currentRoomId = $roomId;
 
         return $this;
     }
@@ -91,7 +88,24 @@ class GameData implements BaseGameStateInterface
         return $this->currentTurn;
     }
 
-    public function getCurrentRoom(): ?Room {
-        return $this->rooms[$this->currentRoom] ?? null;
+    public function hasRoom(): bool
+    {
+        return ! empty($this->rooms);
+    }
+
+    public function getCurrentRoom(): Room
+    {
+
+        return $this->rooms[$this->currentRoomId];
+    }
+
+    public function setExit(string $exit): void
+    {
+        $this->exit = $exit;
+    }
+
+    public function getExit(): ?string
+    {
+        return $this->exit;
     }
 }

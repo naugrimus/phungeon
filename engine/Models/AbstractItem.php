@@ -17,5 +17,5 @@ abstract class AbstractItem
 
     abstract public function useByPlayer(Player $player): void;
 
-    abstract function getDisplay(): string;
+    abstract public function getDisplay(): string;
 }

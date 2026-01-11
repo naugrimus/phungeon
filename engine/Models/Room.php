@@ -25,6 +25,7 @@ class Room
     public function addEnemy(AbstractEnemy $enemy): self
     {
         $this->enemies[] = $enemy;
+
         return $this;
     }
 
@@ -38,16 +39,20 @@ class Room
         unset($this->enemies[$enemyId]);
     }
 
-    public function addItem(AbstractItem $item): self {
+    public function addItem(AbstractItem $item): self
+    {
         $this->items[] = $item;
+
         return $this;
     }
 
-    public function getItems(): array {
+    public function getItems(): array
+    {
         return $this->items;
     }
 
-    public function removeItem($itemId): void {
+    public function removeItem($itemId): void
+    {
         unset($this->items[$itemId]);
     }
 }

@@ -2,20 +2,19 @@
 
 namespace tests;
 
-use Engine\Models\Items\HealtPotion;
 use Engine\Models\Player;
 use PHPUnit\Framework\TestCase;
+use Engine\Models\Items\HealtPotion;
 
-class ItemUsageTest extends TestCase {
-
-
-
-    public function test_player_can_use_item() {
+class ItemUsageTest extends TestCase
+{
+    public function test_player_can_use_item()
+    {
 
         $player = new Player(500);
         $player->setHealth(200);
 
-        $item = new HealtPotion();
+        $item = new HealtPotion;
         $this->assertEquals(200, $player->getHealth());
 
         $player->getInventory()->addItem($item);
@@ -32,6 +31,4 @@ class ItemUsageTest extends TestCase {
         $this->assertCount(0, $player->getInventory()->getItems());
 
     }
-
-
 }

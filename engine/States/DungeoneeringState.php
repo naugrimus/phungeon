@@ -3,9 +3,9 @@
 namespace Engine\States;
 
 use App\enums\Elements;
-use Engine\Models\Player;
 use Engine\Models\Room;
 use Engine\Core\GameData;
+use Engine\Models\Player;
 use Engine\Models\Position;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
@@ -65,7 +65,6 @@ class DungeoneeringState extends AbstractState implements StateInterface
             $this->movement($position);
         }
 
-
         if (ctype_digit($input)) {
 
             $this->useInventoryItem($input);
@@ -77,14 +76,13 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function detectItem()
     {
-        $room = $this->gameData->getCurrentRoom();
         $pPosition = $this->player->getPosition();
-        foreach ($room->getItems() as $key => $i) {
+        foreach ($this->room->getItems() as $key => $i) {
             $iPosition = $i->getPosition();
             if ($iPosition->getX() == $pPosition->getX() && $iPosition->getY() == $pPosition->getY()) {
                 if (! $this->player->usedMaxInventory()) {
                     $this->player->getInventory()->addItem($i);
-                    $room->removeItem($key);
+                    $this->room->removeItem($key);
                 }
             }
         }
@@ -117,11 +115,52 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
     }
 
+    protected function isExit(Position $position): bool
+    {
+        $rows = $this->getMapHeight(); // Y
+        $cols = $this->getMapWidth();  // X
+
+        $exits = [
+            // top
+            [intdiv($cols, 2), -1],
+
+            // bottom
+            [intdiv($cols, 2), $rows],
+
+            // left
+            [0, intdiv($rows, 2)],
+
+            // right
+            [$cols - 1, intdiv($rows, 2)],
+        ];
+
+        $exitValues = [
+            'north',
+            'south',
+            'east',
+            'west',
+        ];
+        foreach ($exits as $key => [$x, $y]) {
+            if ($position->getX() === $x && $position->getY() === $y) {
+                $this->gameData->setExit($exitValues[$key]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function movement(Position $position): void
     {
+        if ($this->isExit($position)) {
+            // create a new room
+            $this->gameData->setState(new CreateRoomState);
+            $this->gameData->updateTurns();
+        }
         if (! $this->detectBlocking($position)) {
-            $this->gameData->getPlayer()->getPosition()->setY($position->getY());
-            $this->gameData->getPlayer()->getPosition()->setX($position->getX());
+            $this->player->getPosition()->setY($position->getY());
+            $this->player->getPosition()->setX($position->getX());
 
             // now move the enemies
             $this->moveEnemies();
@@ -242,5 +281,15 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
         $this->gameData->updateTurns();
 
+    }
+
+    protected function getMapHeight()
+    {
+        return count($this->room->getMap());
+    }
+
+    protected function getMapWidth()
+    {
+        return count($this->room->getMap()[0]);
     }
 }

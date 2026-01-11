@@ -2,8 +2,8 @@
 
 namespace Engine\Factories;
 
-use App\Renderers\GameOver;
 use App\Renderers\Intro;
+use App\Renderers\GameOver;
 use App\Renderers\Dungeoneering;
 
 class renderFactory
@@ -17,7 +17,7 @@ class renderFactory
             'Intro' => new Intro,
             'Dungeoneering' => new Dungeoneering,
             'CreateRoom' => false,
-            'GameOver' => new GameOver
+            'GameOver' => new GameOver,
         };
 
         if ($gameData->getTurns() != $gameData->getCurrentTurn() || $gameData->getTurns() == 0) {
@@ -33,5 +33,4 @@ class renderFactory
 
         }
     }
-
 }

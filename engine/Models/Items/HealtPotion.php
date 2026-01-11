@@ -9,7 +9,6 @@ use Engine\Interfaces\HealthPotionInterface;
 
 class HealtPotion extends AbstractItem implements HealthPotionInterface
 {
-
     protected int $amount = 200;
 
     public function getAmount(): int
@@ -28,7 +27,8 @@ class HealtPotion extends AbstractItem implements HealthPotionInterface
 
     }
 
-    public function getDisplay(): string {
+    public function getDisplay(): string
+    {
         return Elements::HEALTHPOTION;
     }
 }

@@ -12,12 +12,13 @@ class AbstractWeapon
 
     protected int $maxDamage;
 
-
-    public function getHitChance() {
+    public function getHitChance()
+    {
         return $this->hitChance;
     }
 
-    public function getMaxDamage():int {
+    public function getMaxDamage(): int
+    {
         return $this->maxDamage;
     }
 }

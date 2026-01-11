@@ -23,6 +23,7 @@ class Dungeoneering
     {
         $this->gameData = $gameData;
         $this->player = $gameData->getPlayer();
+
         $this->room = $gameData->getCurrentRoom();
 
         $items = $this->player->getInventory()->getItems();
@@ -58,9 +59,6 @@ class Dungeoneering
         fwrite(STDOUT, 'room posX:' . $gameData->getPlayer()->getPosition()->getX() . PHP_EOL);
         fwrite(STDOUT, 'room posY:' . $gameData->getPlayer()->getPosition()->getY() . PHP_EOL);
 
-        fwrite(STDOUT, 'room char under player:' . $this->room->getmap()[$gameData->getPlayer()->getPosition()->getY() + 1][$gameData->getPlayer()->getPosition()->getX()] . PHP_EOL);
-        fwrite(STDOUT, 'room char left player:' . $this->room->getmap()[$gameData->getPlayer()->getPosition()->getY()][$gameData->getPlayer()->getPosition()->getX() - 1] . PHP_EOL);
-
     }
 
     protected function createStatusBar()
@@ -90,18 +88,16 @@ class Dungeoneering
         }
         fwrite(STDOUT, PHP_EOL);
 
-
         fwrite(STDOUT, 'Inventory:' . PHP_EOL);
         $inventory = $this->player->getInventory()->getItems();
         foreach ($inventory as $item) {
             fwrite(STDOUT, $item->getDisplay());
         }
         fwrite(STDOUT, PHP_EOL);
-        for($x = 1; $x < 10; $x++) {
+        for ($x = 1; $x < 10; $x++) {
             fwrite(STDOUT, $x);
         }
         fwrite(STDOUT, PHP_EOL);
-
 
     }
 
