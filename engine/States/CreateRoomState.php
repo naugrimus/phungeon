@@ -6,6 +6,7 @@ use App\enums\Elements;
 use Engine\Models\Room;
 use Engine\Core\GameData;
 use Engine\Models\Player;
+use Engine\Models\EndItem;
 use App\Helpers\RoomGenerator;
 use Engine\Handlers\InputHandler;
 use Engine\Models\Items\HealtPotion;
@@ -53,6 +54,7 @@ class CreateRoomState extends AbstractState implements StateInterface
         $this->room->setPosition($x, $y);
         $this->createMonsters();
         $this->createItems();
+        $this->createEndExit();
         $this->setPlayerPosition($this->gameData->getPlayer());
 
     }
@@ -165,5 +167,21 @@ class CreateRoomState extends AbstractState implements StateInterface
 
         }
 
+    }
+
+    protected function createEndExit()
+    {
+        $change = random_int(0, 20);
+        if ($change < 20) {
+            $map = $this->room->getMap();
+            $mapHeight = count($map);
+            $mapWidth = count($map[0]);
+            if ($map[$y][$x] == Elements::FLOOR) {
+                $item = new EndItem;
+                $item->setPosition($x, $y);
+                $this->room->addEndItem($item);
+
+            }
+        }
     }
 }

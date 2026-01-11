@@ -16,6 +16,8 @@ class Room
 
     protected array $items = [];
 
+    protected ?EndItem $endItem = null;
+
     public function __construct()
     {
         $this->position = new Position;
@@ -63,5 +65,20 @@ class Room
     public function removeItem($itemId): void
     {
         unset($this->items[$itemId]);
+    }
+
+    public function addEndItem(EndItem $item): self
+    {
+        $this->endItem = $item;
+    }
+
+    public function hasEnd(): bool
+    {
+        return $this->endItem !== null;
+    }
+
+    public function getEnd()
+    {
+        return $this->endItem;
     }
 }

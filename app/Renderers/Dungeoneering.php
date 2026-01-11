@@ -36,9 +36,7 @@ class Dungeoneering
         $this->createStatusBar();
 
         foreach ($this->room->getmap() as $y => $row) {
-            // $rowData = str_split($row);
             foreach ($row as $x => $value) {
-                $elementRendered = false;
                 $position = new Position;
                 $position->setY($y);
                 $position->setX($x);
@@ -141,6 +139,13 @@ class Dungeoneering
         foreach ($this->room->getItems() as $item) {
             if ($item->getPosition()->isEqual($position)) {
                 return "\033[93m" . Elements::HEALTHPOTION . "\033[37m";
+            }
+        }
+
+        if ($this->room->hasEnd()) {
+            $end = $this->room->getEnd();
+            if ($end->getPosition()->isEqual($position)) {
+                return "\033[94m" . Elements::ENDITEM . "\033[37m";
             }
         }
 

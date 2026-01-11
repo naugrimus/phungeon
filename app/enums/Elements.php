@@ -13,4 +13,6 @@ class Elements
     const ENEMY = '&';
 
     const HEALTHPOTION = '*';
+
+    const ENDITEM = '@';
 }

@@ -71,7 +71,20 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
         $this->detectCombat();
         $this->detectItem();
+        $this->detectEnd();
 
+    }
+
+    protected function detectEnd()
+    {
+        $pPosition = $this->player->getPosition();
+        if ($this->room->hasEnd()) {
+            $end = $this->room->getEnd();
+
+            if ($this->player->getPosition()->isEqual($end->getPosition())) {
+                $this->gameData->setState(new GameOverState(true));
+            }
+        }
     }
 
     protected function detectItem()
@@ -106,7 +119,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 }
 
                 if ($this->player->isDeath()) {
-                    $this->gameData->setState(new GameOverState);
+                    $this->gameData->setState(new GameOverState(false));
 
                 }
 

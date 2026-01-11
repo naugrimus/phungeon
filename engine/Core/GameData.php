@@ -108,4 +108,9 @@ class GameData implements BaseGameStateInterface
     {
         return $this->exit;
     }
+
+    public function removeRooms()
+    {
+        $this->rooms = [];
+    }
 }
