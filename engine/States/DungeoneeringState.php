@@ -7,6 +7,7 @@ use Engine\Core\GameData;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
 use Engine\Models\Position;
+use Engine\Models\Room;
 
 class DungeoneeringState extends AbstractState implements StateInterface
 {
@@ -16,8 +17,12 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected ?InputHandler $inputHandler;
 
+    protected Room $room;
+
     public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
+        $this->room = $gameData->getCurrentRoom();
+
         $this->gameData = $gameData;
         $this->inputHandler = $inputHandler;
         $this->detectMovement();
@@ -61,10 +66,9 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function detectCombat() {
         
-        $room = $this->gameData->getCurrentRoom();
         $player = $this->gameData->getPlayer();
         $pPosition = $player->getPosition();
-        foreach($room->getEnemies() as $key => $e) {
+        foreach($this->room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
             if($player->getPosition()->isEqual($ePosition)) {
                 $player->isAttackingEnemy($e);
@@ -74,7 +78,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
                 $dmg = $player->attack();
                 $e->damage($dmg);
                 if($e->isDeath()){
-                    $room->removeEnemy($key);
+                    $this->room->removeEnemy($key);
                 }
 
                 if($player->isDeath()) {
@@ -101,10 +105,9 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function moveEnemies(): void
     {
-        $room = $this->gameData->getCurrentRoom();
 
         $player = $this->gameData->getPlayer();
-        foreach ($room->getEnemies() as $enemy) {
+        foreach ($this->room->getEnemies() as $enemy) {
 
             $enemyPosition = $enemy->getPosition();
             // check if the horizontal position of the enemy should be moved
@@ -141,9 +144,8 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function isEnemyPosition(Position $position): bool
     {
-        $room = $this->gameData->getCurrentRoom();
 
-        foreach ($room->getEnemies() as $enemy) {
+        foreach ($this->room->getEnemies() as $enemy) {
             $eposition = $enemy->getPosition();
             if ($eposition->getX() === $position->getX() && $eposition->getY() === $position->getY()) {
 
@@ -188,8 +190,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function detectBlocking(Position $position): bool
     {
-        $room = $this->gameData->getCurrentRoom();
-        $map = $room->getMap();
+        $map = $this->room->getMap();
 
         foreach ($map as $row => $value) {
             foreach ($value as $col => $char) {
