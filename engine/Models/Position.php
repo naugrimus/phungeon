@@ -35,4 +35,8 @@ class Position
     public function isEqual(Position $position): bool {
         return $this->x === $position->x && $this->y === $position->y;
     }
+
+    public function notEqual(Position $position): bool {
+        return $this->x !== $position->x || $this->y !== $position->y;
+    }
 }

@@ -5,14 +5,21 @@ namespace App\Renderers;
 use App\enums\Elements;
 use Engine\Core\GameData;
 use App\enums\AnsiiConstants;
+use Engine\Models\Player;
+use Engine\Models\Position;
 
 class Dungeoneering
 {
     protected GameData $gameData;
 
+    protected Position $position;
+
+    protected Player $player;
     public function render(GameData $gameData): void
     {
         $this->gameData = $gameData;
+        $this->player = $gameData->getPlayer();
+
         fwrite(STDOUT, AnsiiConstants::MOVECURSORTOPLEFT);
         fwrite(STDOUT, AnsiiConstants::HIDECURSOR);
 
@@ -26,17 +33,17 @@ class Dungeoneering
             // $rowData = str_split($row);
             foreach ($row as $x => $value) {
                 $elementRendered = false;
-                if ($x == $gameData->getPlayer()->getPosition()->getX() &&
-                    $y == $gameData->getPlayer()->getPosition()->getY()) {
+                $position = new Position();
+                $position->setY($y);
+                $position->setX($x);
+                if ($this->player->getPosition()->isEqual($position)) {
                     fwrite(STDOUT, "\033[32m" . Elements::PLAYER . "\033[37m");
                     $elementRendered = true;
                 }
 
                 foreach ($room->getEnemies() as $enemy) {
-                    if ($x == $enemy->getPosition()->getX() &&
-                        $y == $enemy->getPosition()->getY()) {
-                        if ($gameData->getPlayer()->getPosition()->getX() != $enemy->getPosition()->getX() ||
-                            $gameData->getPlayer()->getPosition()->getY() != $enemy->getPosition()->getY()) {
+                    if ($enemy->getPosition()->isEqual($position)) {
+                        if ($this->player->getPosition()->notEqual($enemy->getPosition())) {
                             fwrite(STDOUT, "\033[91m" . Elements::ENEMY .  "\033[37m");
                             $elementRendered = true;
 
