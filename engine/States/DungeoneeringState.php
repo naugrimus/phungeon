@@ -15,6 +15,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected ?InputHandler $inputHandler;
 
+
     public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
         $this->gameData = $gameData;
@@ -58,6 +59,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $this->detectItem();
 
     }
+
 
     protected function detectItem()
     {
