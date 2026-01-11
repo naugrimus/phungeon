@@ -62,7 +62,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $pPosition = $player->getPosition();
         foreach($room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
-            if($ePosition->getX() == $pPosition->getX() && $ePosition->getY() == $pPosition->getY()){
+            if($player->getPosition()->isEqual($ePosition)) {
                 $player->isAttackingEnemy($e);
                 $dmg = $player->attack();
                 $player->damage($dmg);
