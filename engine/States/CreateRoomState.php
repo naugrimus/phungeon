@@ -28,9 +28,7 @@ class CreateRoomState extends AbstractState implements StateInterface
             // set the player position
             $this->setPlayerPosition($gameData->getPlayer(), $this->room);
             $player = $gameData->getPlayer();
-            $item = new HealtPotion();
-            $player->getInventory()->addItem($item);
-
+            
             $this->createMonsters();
             $this->createItems();
         }
