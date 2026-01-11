@@ -54,8 +54,7 @@ class Dungeoneering
                 }
 
                 foreach($room->getItems() as $item) {
-                    if ($x == $item->getPosition()->getX() &&
-                        $y == $item->getPosition()->getY()) {
+                    if ($item->getPosition()->isEqual($position)) {
                         if ($gameData->getPlayer()->getPosition()->getX() != $item->getPosition()->getX() ||
                             $gameData->getPlayer()->getPosition()->getY() != $item->getPosition()->getY()) {
                             fwrite(STDOUT, "\033[93m" . Elements::HEALTHPOTION . "\033[37m");
