@@ -3,11 +3,12 @@
 namespace Engine\States;
 
 use App\enums\Elements;
+use Engine\Models\Player;
+use Engine\Models\Room;
 use Engine\Core\GameData;
+use Engine\Models\Position;
 use Engine\Handlers\InputHandler;
 use Engine\Interfaces\StateInterface;
-use Engine\Models\Position;
-use Engine\Models\Room;
 
 class DungeoneeringState extends AbstractState implements StateInterface
 {
@@ -19,9 +20,13 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected Room $room;
 
+    protected Player $player;
+
     public function handle(GameData $gameData, InputHandler $inputHandler): void
     {
         $this->room = $gameData->getCurrentRoom();
+
+        $this->player = $gameData->getPlayer();
 
         $this->gameData = $gameData;
         $this->inputHandler = $inputHandler;
@@ -54,13 +59,13 @@ class DungeoneeringState extends AbstractState implements StateInterface
         }
 
         if (in_array($input, $movementInput)) {
-            $position = New Position();
+            $position = new Position;
             $position->setX($x);
             $position->setY($y);
             $this->movement($position);
         }
 
-        if(is_integer($input)) {
+        if (is_int($input)) {
             $this->useInventoryItem($input);
         }
         $this->detectCombat();
@@ -68,54 +73,48 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     }
 
-
     protected function detectItem()
     {
         $room = $this->gameData->getCurrentRoom();
-        $player = $this->gameData->getPlayer();
-        $pPosition = $player->getPosition();
+        $pPosition = $this->player->getPosition();
         foreach ($room->getItems() as $key => $i) {
             $iPosition = $i->getPosition();
             if ($iPosition->getX() == $pPosition->getX() && $iPosition->getY() == $pPosition->getY()) {
-                if (!$player->usedMaxInventory()) {
-                    $player->getInventory()->addItem($i);
+                if (! $this->player->usedMaxInventory()) {
+                    $this->player->getInventory()->addItem($i);
                     $room->removeItem($key);
                 }
             }
         }
     }
 
-    
-
     protected function detectCombat()
     {
 
-        $room = $this->gameData->getCurrentRoom();
-        $player = $this->gameData->getPlayer();
-        $pPosition = $player->getPosition();
-        foreach($this->room->getEnemies() as $key => $e) {
+        $pPosition = $this->player->getPosition();
+        foreach ($this->room->getEnemies() as $key => $e) {
             $ePosition = $e->getPosition();
-            if($player->getPosition()->isEqual($ePosition)) {
-                $player->isAttackingEnemy($e);
-                $dmg = $player->attack();
-                $player->damage($dmg);
+            if ($this->player->getPosition()->isEqual($ePosition)) {
+                $this->player->isAttackingEnemy($e);
+                $dmg = $this->player->attack();
+                $this->player->damage($dmg);
 
-                $dmg = $player->attack();
+                $dmg = $this->player->attack();
                 $e->damage($dmg);
-                if($e->isDeath()){
+                if ($e->isDeath()) {
                     $this->room->removeEnemy($key);
                 }
 
-                if ($player->isDeath()) {
+                if ($this->player->isDeath()) {
                     $this->gameData->setState(new GameOverState);
 
                 }
-
 
             }
 
         }
     }
+
     protected function movement(Position $position): void
     {
         if (! $this->detectBlocking($position)) {
@@ -131,30 +130,29 @@ class DungeoneeringState extends AbstractState implements StateInterface
     protected function moveEnemies(): void
     {
 
-        $player = $this->gameData->getPlayer();
         foreach ($this->room->getEnemies() as $enemy) {
 
             $enemyPosition = $enemy->getPosition();
             // check if the horizontal position of the enemy should be moved
 
-            $eDiff = $this->checkRelativePosition($player->getPosition()->getX(), $enemyPosition->getX());
+            $eDiff = $this->checkRelativePosition($this->player->getPosition()->getX(), $enemyPosition->getX());
             $ex = $enemyPosition->getX() + $eDiff;
 
             if ($this->isPlayerPosition($ex, $enemyPosition->getY())) {
                 continue;
             } else {
-                $player->noAttack();
+                $this->player->noAttack();
             }
 
             if ($this->canMoveEnemy($ex, $enemyPosition->getY())) {
                 $enemyPosition->setX($ex);
             } else {
-                $eDiff = $this->checkRelativePosition($player->getPosition()->getY(), $enemyPosition->getY());
+                $eDiff = $this->checkRelativePosition($this->player->getPosition()->getY(), $enemyPosition->getY());
                 $ey = $enemyPosition->getY() + $eDiff;
                 if ($this->isPlayerPosition($enemyPosition->getX(), $ey)) {
                     continue;
                 } else {
-                    $player->noAttack();
+                    $this->player->noAttack();
 
                 }
                 if ($this->canMoveEnemy($enemyPosition->getX(), $ey)) {
@@ -184,7 +182,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
 
     protected function canMoveEnemy($x, $y): bool
     {
-        $position = new Position();
+        $position = new Position;
         $position->setX($x);
         $position->setY($y);
         if ($this->detectBlocking($position)) {
@@ -228,12 +226,13 @@ class DungeoneeringState extends AbstractState implements StateInterface
         return false;
     }
 
-    protected function useInventoryItem(int $id):void {
+    protected function useInventoryItem(int $id): void
+    {
 
         $player = $this->gameData->getPlayer();
         $items = $player->getInventory()->getItems();
-        foreach($items as $key => $item) {
-            if($id == $key + 1) {
+        foreach ($items as $key => $item) {
+            if ($id == $key + 1) {
                 $player->useItem($key);
             }
         }

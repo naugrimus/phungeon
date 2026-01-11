@@ -55,7 +55,7 @@ class Dungeoneering
                             $elementRendered = true;
 
                         } else {
-                            $elementRendered = true;
+                            $elementRendered = false;
                         }
                     }
                 }
