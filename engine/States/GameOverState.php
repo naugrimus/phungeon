@@ -12,8 +12,6 @@ class GameOverState extends AbstractState implements StateInterface
 
     protected bool $success = false;
 
-
-
     public function handle(GameData $gameData, InputHandler $inputHandler)
     {
         $gameData->removeRooms();

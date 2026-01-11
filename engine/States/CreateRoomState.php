@@ -2,20 +2,19 @@
 
 namespace Engine\States;
 
-use App\enums\Elements;
 use Engine\Models\Room;
 use Engine\Core\GameData;
 use Engine\Models\Player;
-use Engine\Models\EndItem;
+use Engine\Traits\MapTrait;
 use App\Helpers\RoomGenerator;
 use Engine\Handlers\InputHandler;
-use Engine\Models\Items\HealtPotion;
+use Engine\Handlers\ElementCreator;
 use Engine\Interfaces\StateInterface;
-use Engine\Models\Enemies\ZombieWarrior;
-use Engine\Traits\MapTrait;
+
 class CreateRoomState extends AbstractState implements StateInterface
 {
     use MapTrait;
+
     const NAME = 'CreateRoom';
 
     protected Room $room;
@@ -53,9 +52,9 @@ class CreateRoomState extends AbstractState implements StateInterface
         $this->gameData->addRoom($this->room);
         $this->gameData->setCurrentRoomId(count($this->gameData->getRooms()) - 1);
         $this->room->setPosition($x, $y);
-        $this->createMonsters();
-        $this->createItems();
-        $this->createEndExit();
+
+        $creator = new ElementCreator;
+        $creator->create($this->room);
         $this->setPlayerPosition($this->gameData->getPlayer());
 
     }
@@ -102,8 +101,8 @@ class CreateRoomState extends AbstractState implements StateInterface
     {
         $map = $this->room->getMap();
 
-        $mapHeight = count($map);
-        $mapWidth = count($map[0]);
+        $mapHeight = $this->getMapWidth();
+        $mapWidth = $this->getMapHeight();
 
         $x = intdiv($mapWidth, 2);
         $y = intdiv($mapHeight, 2);
@@ -129,67 +128,5 @@ class CreateRoomState extends AbstractState implements StateInterface
             default:
                 $player->setPosition($x, $y);
         }
-    }
-
-    public function createMonsters()
-    {
-
-        for ($num = 1; $num < 7; $num++) {
-            $enemy = new ZombieWarrior(100);
-            [$x, $y]  = $this->randomize();
-
-            $enemy->setPosition($x, $y);
-            $this->room->addEnemy($enemy);
-
-        }
-
-    }
-
-    protected function createItems(): void
-    {
-        for ($num = 1; $num < 12; $num++) {
-            $item = new HealtPotion;
-
-            [$x, $y]  = $this->randomize();
-
-
-            $item->setPosition($x, $y);
-            $this->room->addItem($item);
-
-        }
-
-    }
-
-    protected function createEndExit()
-    {
-        $change = random_int(0, 20);
-        if ($change < 20) {
-            $position = $this->randomize();
-
-            [$x, $y] = $position;
-
-            $item = new EndItem;
-            $item->setPosition($x, $y);
-            $this->room->addEndItem($item);
-
-        }
-    }
-
-    protected function randomize(): ?array
-    {
-
-        $map = $this->room->getMap();
-
-        for ($i = 0; $i < 20; $i++) {
-            $x = rand(0, $this->getMapWidth() - 1);
-            $y = rand(0, $this->getMapHeight() - 1);
-
-            if ($map[$y][$x] === Elements::FLOOR) {
-                return [$x, $y];
-            }
-        }
-
-        return null;
-
     }
 }
