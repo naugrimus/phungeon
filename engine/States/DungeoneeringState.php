@@ -94,7 +94,7 @@ class DungeoneeringState extends AbstractState implements StateInterface
         $pPosition = $this->player->getPosition();
         foreach ($this->room->getItems() as $key => $i) {
             $iPosition = $i->getPosition();
-            if ($iPosition->getX() == $pPosition->getX() && $iPosition->getY() == $pPosition->getY()) {
+            if ($pPosition->isEqual($iPosition)) {
                 if (! $this->player->usedMaxInventory()) {
                     $this->player->getInventory()->addItem($i);
                     $this->room->removeItem($key);

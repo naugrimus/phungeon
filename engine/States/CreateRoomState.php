@@ -99,10 +99,9 @@ class CreateRoomState extends AbstractState implements StateInterface
 
     protected function setPlayerPosition(Player $player): void
     {
-        $map = $this->room->getMap();
 
-        $mapHeight = $this->getMapWidth();
-        $mapWidth = $this->getMapHeight();
+        $mapHeight = $this->getMapHeight();
+        $mapWidth = $this->getMapWidth();
 
         $x = intdiv($mapWidth, 2);
         $y = intdiv($mapHeight, 2);
