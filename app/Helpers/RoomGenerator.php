@@ -40,6 +40,7 @@ class RoomGenerator
 
         $this->carve($startX, $startY, $this->carveDirections, $this->width, $this->height);
 
+
         $this->createExits();
 
         return $this->room;
@@ -59,7 +60,7 @@ class RoomGenerator
 
                 if ($this->room[$ny][$nx] === Elements::WALL) {
                     $this->room[$y + intdiv($dy, 2)][$x + intdiv($dx, 2)] = Elements::FLOOR;
-                    $this->room[$ny][$nx] = ' ';
+                    $this->room[$ny][$nx] = Elements::FLOOR;
                     $this->carve($nx, $ny, $dirs, $width, $height);
                 }
             }
@@ -70,12 +71,33 @@ class RoomGenerator
 
     protected function createExits(): void
     {
+        $exits = [
+            [intdiv($this->width, 2), 0, 0, 1],                      // top
+            [intdiv($this->width, 2), $this->height - 1, 0, -1],    // bottom
+            [0, intdiv($this->height, 2), 1, 0],                    // left
+            [$this->width - 1, intdiv($this->height, 2), -1, 0],    // right
+        ];
 
-        $this->room[0][intval($this->width / 2)] = Elements::FLOOR;
-        $this->room[intval($this->height / 2)][0] = Elements::FLOOR;
-        $this->room[$this->height - 1][intval($this->width / 2)] = Elements::FLOOR;
-        $this->room[intval($this->height / 2)][$this->width - 1] = Elements::FLOOR;
+        foreach ($exits as [$x, $y, $dx, $dy]) {
+            $this->room[$y][$x] = Elements::FLOOR;
 
+            $cx = $x + $dx;
+            $cy = $y + $dy;
+
+            while (
+                $cx > 0 && $cy > 0 &&
+                $cx < $this->width - 1 &&
+                $cy < $this->height - 1
+            ) {
+                if ($this->room[$cy][$cx] === Elements::FLOOR) {
+                    break;
+                }
+
+                $this->room[$cy][$cx] = Elements::FLOOR;
+                $cx += $dx;
+                $cy += $dy;
+            }
+        }
     }
 
 
